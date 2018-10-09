@@ -8,9 +8,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import App from 'components/App';
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
-});
+const uri =
+  process.env.NODE_ENV === 'production'
+    ? 'Set uri for production here'
+    : 'http://localhost:4000';
+
+const httpLink = createHttpLink({ uri });
 
 const client = new ApolloClient({
   link: httpLink,
