@@ -138,7 +138,8 @@ module.exports = {
     // for React Native Web.
     extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      components: path.join(__dirname, '../src/components')
+      components: path.join(__dirname, '../src/components'),
+      containers: path.join(__dirname, '../src/containers')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding
