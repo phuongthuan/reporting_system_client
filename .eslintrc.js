@@ -21,7 +21,7 @@ module.exports = {
     'arrow-body-style': [2, 'as-needed'],
     'class-methods-use-this': 0,
     'comma-dangle': 0,
-    'no-console': 1,
+    'no-console': 0,
     indent: [
       2,
       2,

@@ -21,7 +21,7 @@
     "chalk": "2.4.1",
     "cross-env": "^5.2.0",
     "css-loader": "1.0.0",
-    "dotenv": "6.0.0",
+    "dotenv": "^6.1.0",
     "dotenv-expand": "^4.2.0",
     "emotion": "^9.2.12",
     "enzyme": "^3.7.0",
@@ -55,6 +55,10 @@
     "react-dev-utils": "^6.0.4",
     "react-dom": "^16.5.2",
     "react-emotion": "^9.2.12",
+    "react-google-authorize": "^1.0.3",
+    "react-google-login": "^3.2.1",
+    "react-google-oauth": "^1.0.0",
+    "react-loadable": "^5.5.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "resolve": "1.8.1",
@@ -85,6 +89,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "proxy": "http://localhost:4000",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
