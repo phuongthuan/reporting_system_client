@@ -6,7 +6,11 @@ import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-import App from 'components/App';
+import 'semantic-ui-css/semantic.min.css';
+import './ress.min.css';
+import './common.css';
+
+import App from 'containers/App';
 
 const uri =
   process.env.NODE_ENV === 'production'
