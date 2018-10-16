@@ -15,7 +15,7 @@ injectGlobal`
 
   body {
     font-family:"Hiragino Kaku Gothic ProN","Hiragino Kaku Gothic Pro","游ゴシック","YuGothic",Meiryo,メイリオ,"ＭＳ ゴシック",sans-serif;
-    background-color: #E5E5E5;
+    background-color: #FFFFFF;
   }
 
   *:focus {

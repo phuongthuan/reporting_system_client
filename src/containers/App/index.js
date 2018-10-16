@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-
-import { MainWrapper } from './styles';
-import SideBar from '../../components/SideBar';
+import PrivateRoute from '../../utils/PrivateRoute';
 import NoMatch from '../../utils/NoMatch';
 
 const loading = () => <div>Loading...</div>;
@@ -38,20 +36,16 @@ const AdminPage = Loadable({
   loading
 });
 
-
 const App = () => (
   <div className="App">
     <Switch>
-      <Route location={location} exact path="/" component={HomePage} />
-      <Route location={location} path="/auth" component={AuthPage} />
-      <MainWrapper>
-        <SideBar/>
-        <Route location={location} path="/members" component={MemberPage} />
-        <Route location={location} path="/reports" component={DailyReportPage} />
-        <Route location={location} path="/profile" component={ProfilePage} />
-        <Route location={location} path="/admin" component={AdminPage} />
-      </MainWrapper>
-      <Route location={location} component={NoMatch}/>
+      <PrivateRoute location={location} exact path="/" component={HomePage}/>
+      <Route location={location} path="/auth" component={AuthPage}/>
+      <PrivateRoute location={location} path="/members" component={MemberPage}/>
+      <PrivateRoute location={location} path="/reports" component={DailyReportPage}/>
+      <PrivateRoute location={location} path="/profile" component={ProfilePage}/>
+      <PrivateRoute location={location} path="/admin" component={AdminPage}/>
+      <Route component={NoMatch} />
     </Switch>
   </div>
 );
