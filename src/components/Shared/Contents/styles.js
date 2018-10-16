@@ -10,7 +10,7 @@ const ContentWrapper = styled.div`
 
 const ContentHeader = styled.div`
   height: 40px;
-  kine-height: 1;
+  line-height: 0.5;
   vertical-align: bottom;
   font-weight: bold;
   font-size: 36px;
