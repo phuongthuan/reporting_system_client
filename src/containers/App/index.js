@@ -7,12 +7,17 @@ import { MainWrapper } from './styles';
 const loading = () => <div>Loading...</div>;
 
 const Home = Loadable({
-  loader: () => import('components/Dashboard'),
+  loader: () => import('components/Home'),
   loading
 });
 
 const Auth = Loadable({
   loader: () => import('components/Auth'),
+  loading
+});
+
+const DailyReports = Loadable({
+  loader: () => import('containers/Member/DailyReports'),
   loading
 });
 
@@ -22,6 +27,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/auth" component={Auth} />
+        <Route exact path="/daily_reports" component={DailyReports} />
       </Switch>
     </MainWrapper>
   </div>
