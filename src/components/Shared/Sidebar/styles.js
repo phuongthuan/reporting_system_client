@@ -1,17 +1,23 @@
 import styled from 'react-emotion';
 
 const SidebarWrapper = styled.div`
-  font-size: 16px;
+  font-size: 0.7rem;
   background-color: #3a405a;
-  width: 300px;
   height: 100vh;
-  float: left;
+  max-width: 300px;
+  min-width: 220px;
+  flex-grow: 1;
+
+  @media (max-width: 780px) {
+    display: none;
+  }
 `;
 
 const SidebarElement = styled.div`
   background-color: #3a405a;
   width: 100%;
-  height: 80px;
+  height: 8vh;
+  min-height: 60px;
   color: #fff;
   display: table;
 
@@ -27,27 +33,30 @@ const SidebarElementSelected = styled(SidebarElement)`
 `;
 
 const SidebarIconArea = styled.div`
+  padding: 20px;
   width: 100%;
-  height: 300px;
-  position: relative;
 `;
 
 const SidebarIcon = styled.div`
-  width: 230px;
-  height: 230px;
-
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  -webkit-transform: translateY(-50%) translateX(-50%);
-  transform: translateY(-50%) translateX(-50%);
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
 `;
 
 const SidebarUserName = styled.div`
-  margin-top: 10px;
+  text-align: center;
   color: #fff;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 0.6rem;
+`;
+
+const Profile = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+`;
+
+const EditProfile = styled.div`
+  color: #a6aaad;
 `;
 
 export {
@@ -56,5 +65,7 @@ export {
   SidebarElementSelected,
   SidebarIconArea,
   SidebarIcon,
-  SidebarUserName
+  SidebarUserName,
+  Profile,
+  EditProfile
 };

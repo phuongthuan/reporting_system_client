@@ -16,8 +16,8 @@ const Auth = Loadable({
   loading
 });
 
-const DailyReports = Loadable({
-  loader: () => import('containers/Member/DailyReports'),
+const Member = Loadable({
+  loader: () => import('containers/Member'),
   loading
 });
 
@@ -26,8 +26,8 @@ const App = () => (
     <MainWrapper>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/auth" component={Auth} />
-        <Route exact path="/daily_reports" component={DailyReports} />
+        <Route path="/auth" component={Auth} />
+        <Route path="/member" component={Member} />
       </Switch>
     </MainWrapper>
   </div>

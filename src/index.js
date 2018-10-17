@@ -8,7 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import 'semantic-ui-css/semantic.min.css';
 import './ress.min.css';
-import './common.css';
+import './common.style';
 
 import App from 'containers/App';
 
