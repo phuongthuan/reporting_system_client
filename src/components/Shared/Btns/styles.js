@@ -9,7 +9,7 @@ const SubmitBtn = styled(BtnBase)`
   width: 160px;
   background-color: #0facf3;
   color: #fff;
-  font-size: 18px;
+  font-size: 0.8rem;
 `;
 
 export { SubmitBtn };

@@ -2,6 +2,9 @@ import styled from 'react-emotion';
 
 const MainWrapper = styled.div`
   height: 100%;
+  width: 100%;
+  display: flex;
+
   display: -ms-flexbox;
   display: -webkit-box;
   display: -moz-box;

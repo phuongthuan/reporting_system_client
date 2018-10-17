@@ -3,9 +3,13 @@ import { Input } from 'semantic-ui-react';
 
 const SearchInput = styled(Input)`
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 0.7rem;
   margin-top: 40px;
   width: 33%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const ReportsTable = styled.div`
@@ -16,22 +20,25 @@ const ReportsTable = styled.div`
 
 const ReportsHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 4fr 4fr 2fr;
   background-color: #e5e5e5;
-  padding: 20px 40px;
+  padding: 1rem 1.5rem;
   height: 60px;
 `;
 
 const ReportsHeaderColumn = styled.div`
+  margin-right: 0.2rem;
+  font-size: 0.7rem;
   font-weight: bold;
 `;
 
 const ReportsRow = styled.div`
-  font-size: 16px;
+  font-size: 0.7rem;
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
-  padding: 0 40px;
+  grid-template-columns: 1fr 1fr 4fr 4fr 2fr;
+
+  padding: 0 1.5rem;
   border-bottom: 1px #a6aaad solid;
   height: 60px;
   align-items: center;
@@ -42,31 +49,39 @@ const ReportsRow = styled.div`
 `;
 
 const ReportsRowColumn = styled.div`
-  font-size: 16px;
+  margin-right: 0.2rem;
+  font-size: 0.7rem;
 `;
 
 const IssueTag = styled.button`
-  font-size: 14px;
+  font-size: 0.5rem;
   background-color: #cbefff;
   color: #0facf3;
   border-radius: 5px;
-  margin-right: 10px;
-  padding: 2px 4px;
+  margin: 0.08rem;
+  padding: 0.08rem;
   font-weight: bold;
 
   &:last-child {
     margin: none;
   }
+
+  @media (max-width: 1024px) {
+    padding: 0;
+    font-size: 0.2rem;
+  }
 `;
 
 const IconBtn = styled.div`
-  padding: 5px;
-  height: 36px;
-  width: 36px;
+  font-size: 0.6rem;
+  padding: 0.2rem;
   display: inline-block;
-  margin-right: 10px;
-  line-height: 18px;
-  text-align: center;
+  line-height: 1rem;
+
+  @media (max-width: 1024px) {
+    padding: 0;
+    font-size: 0.2rem;
+  }
 `;
 
 export {

@@ -2,10 +2,9 @@ import styled from 'react-emotion';
 
 const ContentWrapper = styled.div`
   background-color: #fff;
-  margin: 40px;
-  padding: 20px;
-  float: left;
-  width: calc(100vw - 380px);
+  margin: 1.5rem;
+  padding: 1rem;
+  flex-grow: 9;
 `;
 
 const ContentHeader = styled.div`
@@ -13,8 +12,8 @@ const ContentHeader = styled.div`
   line-height: 0.5;
   vertical-align: bottom;
   font-weight: bold;
-  font-size: 36px;
-  line-height: 30px;
+  font-size: 2rem;
+  line-height: 2rem;
 `;
 
 export { ContentWrapper, ContentHeader };
