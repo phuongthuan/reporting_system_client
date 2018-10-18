@@ -10,6 +10,7 @@ import {
   Profile,
   EditProfile
 } from 'components/Shared/Sidebar/styles';
+
 import Element from 'components/Shared/Sidebar/Element';
 
 const items = [
@@ -17,13 +18,13 @@ const items = [
     id: 1,
     icon: 'pencil alternate',
     text: 'Write a Daily Report',
-    link: '/member/daily_reports/new'
+    link: '/reports/new'
   },
   {
     id: 2,
     icon: 'copy outline',
     text: 'Your Daily Reports',
-    link: '/member/daily_reports'
+    link: '/reports'
   },
   {
     id: 3,
@@ -33,7 +34,7 @@ const items = [
   }
 ];
 
-const MemberSidebar = ({ pathname }) => (
+const SideBar = ({ pathname }) => (
   <SidebarWrapper>
     <SidebarIconArea>
       <SidebarIcon>
@@ -45,7 +46,7 @@ const MemberSidebar = ({ pathname }) => (
       </SidebarIcon>
       <Profile>
         <SidebarUserName>Matsumoto Yuji</SidebarUserName>
-        <Link to="/member/profile/edit">
+        <Link to="/profile/edit">
           <EditProfile>
             <Icon name="setting" />
             edit profile
@@ -66,4 +67,4 @@ const MemberSidebar = ({ pathname }) => (
   </SidebarWrapper>
 );
 
-export default MemberSidebar;
+export default SideBar;

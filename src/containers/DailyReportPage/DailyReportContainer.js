@@ -17,7 +17,7 @@ import {
 } from 'components/Shared/Contents/styles';
 import { headerItems, items } from './constants';
 
-const DailyReports = () => (
+const DailyReportContainer = () => (
   <ContentWrapper>
     <ContentHeader>Your Daily Reports</ContentHeader>
     <SearchInput
@@ -57,4 +57,4 @@ const DailyReports = () => (
   </ContentWrapper>
 );
 
-export default DailyReports;
+export default DailyReportContainer;
