@@ -20,7 +20,7 @@ const ReportsTable = styled.div`
 
 const ReportsHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 4fr 4fr 2fr;
+  grid-template-columns: 1fr 1fr 4fr 4fr 4fr 2fr;
   background-color: #e5e5e5;
   padding: 1rem 1.5rem;
   height: 60px;
@@ -36,7 +36,7 @@ const ReportsRow = styled.div`
   font-size: 0.7rem;
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr 1fr 4fr 4fr 2fr;
+  grid-template-columns: 1fr 1fr 4fr 4fr 4fr 2fr;
 
   padding: 0 1.5rem;
   border-bottom: 1px #a6aaad solid;
@@ -77,6 +77,7 @@ const IconBtn = styled.div`
   padding: 0.2rem;
   display: inline-block;
   line-height: 1rem;
+  cursor: pointer;
 
   @media (max-width: 1024px) {
     padding: 0;
