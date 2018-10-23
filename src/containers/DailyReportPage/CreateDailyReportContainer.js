@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import {
-  ContentWrapper,
-  ContentHeader
-} from 'components/Shared/Contents/styles';
+import { Header, Divider } from 'semantic-ui-react';
+import DailyReportForm from 'components/DailyReportForm';
+import { ContentWrapper } from '../../styles/App';
 
 class CreateDailyReportContainer extends Component {
   render() {
     return (
       <ContentWrapper>
-        <ContentHeader>
-          Create Daily Report Page
-        </ContentHeader>
+        <Header>
+          Create New Daily Report
+        </Header>
+        <Divider/>
+        <DailyReportForm />
       </ContentWrapper>
     );
   }

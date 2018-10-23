@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 
 class AdminContainer extends Component {
   render() {
@@ -10,7 +9,5 @@ class AdminContainer extends Component {
     );
   }
 }
-
-// AdminContainer.propTypes = {};
 
 export default AdminContainer;

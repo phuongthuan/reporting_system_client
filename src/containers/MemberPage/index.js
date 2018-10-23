@@ -1,13 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import SideBar from 'components/SideBar';
+import { MainWrapper, RightContent, LeftContent } from '../../styles/App';
+import NoMatch from '../../utils/NoMatch';
+import MemberContainer from './MemberContainer';
 
-class MemberPage extends Component {
-  render() {
-    return (
-      <div>
-        Member Page for Team leader can see all of their members.
-      </div>
-    );
-  }
-}
+const MemberPage = ({ match }) => (
+  <MainWrapper>
+    <LeftContent>
+      <SideBar />
+    </LeftContent>
+    <RightContent>
+      <Switch>
+        <Route exact path={match.path} component={MemberContainer} />
+        <Route component={NoMatch} />
+      </Switch>
+    </RightContent>
+  </MainWrapper>
+);
 
 export default MemberPage;
