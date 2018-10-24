@@ -1,13 +1,13 @@
 import React from 'react';
 import { Formik } from 'formik';
 import gql from 'graphql-tag';
-import isEmpty from 'lodash/isEmpty';
 import * as Yup from 'yup';
 import { Mutation } from 'react-apollo';
 import TextArea from '../TextArea';
 import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
 import IssueSelect from '../IssueSelect';
+import { parseToArrayOfObject } from '../../utils/parseToArrayOfObject';
 
 const CREATE_DAILY_REPORT_MUTATION = gql`
 
@@ -68,9 +68,7 @@ const DailyReportForm = () => (
           onSubmit={async (values, { setSubmitting, setStatus, setErrors, resetForm }) => {
             const { title, achievement, plan, description, comment } = values;
 
-            const issues = isEmpty(values.issues)
-              ? []
-              : values.issues.map(issue => ({ id: issue }));
+            const issues = parseToArrayOfObject(values.issues);
 
             try {
               await createDailyReport({
@@ -94,7 +92,7 @@ const DailyReportForm = () => (
             }
           }}
 
-          render={({ values, handleSubmit, handleChange, isSubmitting, touched, errors }) => (
+          render={({ values, handleSubmit, handleChange, touched, errors }) => (
             <form onSubmit={handleSubmit}>
 
               <TextInput
@@ -115,7 +113,7 @@ const DailyReportForm = () => (
                 onChange={handleChange}
               />
 
-              <IssueSelect values={values || ''}/>
+              <IssueSelect values={values || ''} />
 
               <TextArea
                 type="textarea"
@@ -147,7 +145,7 @@ const DailyReportForm = () => (
               <AsyncButton
                 buttonName="Create"
                 type="submit"
-                loading={isSubmitting}
+                loading={loading}
               />
             </form>
           )}

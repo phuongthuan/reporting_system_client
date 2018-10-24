@@ -15,11 +15,12 @@ const FETCH_ISSUES_QUERY = gql`
   }
 `;
 
-const IssueSelect = ({values}) => (
+const IssueSelect = ({ values }) => (
   <Query query={FETCH_ISSUES_QUERY}>
     {({ loading, error, data } ) => {
       if (loading) return <div>Loading...</div>;
       if (error) return <div>Error</div>;
+
       const { issues } = data;
 
       return (
@@ -28,17 +29,20 @@ const IssueSelect = ({values}) => (
           render={({ remove, insert, push }) => (
             <Select>
               {values.issues && values.issues.length > 0 ? (
-                values.issues.map((issue, index) => (
+                values.issues.map((iselected, index) => (
                   <div key={uuidv1()}>
                     <div>
 
-                      <Field component="select" name={`issues.${index}`}>
+                      <Field
+                        component="select"
+                        name={`issues.${index}`}
+                      >
                         {issues.map(issue => (
                           <option
                             key={issue.id}
-                            value={issue.id}
+                            value={JSON.stringify(issue)}
                           >
-                            {issue.name}
+                            {issue.name} (ID: {issue.id})
                           </option>
                         ))}
                       </Field>
@@ -52,7 +56,7 @@ const IssueSelect = ({values}) => (
                         <b> - </b>
                       </button>
                       <button
-                        onClick={() => insert(index, issues[0].id)}
+                        onClick={() => insert(index, JSON.stringify(issues[0]))}
                       >
                         <b> + </b>
                       </button>
@@ -62,7 +66,7 @@ const IssueSelect = ({values}) => (
                 ))
               ) : (
                 <button
-                  onClick={() => push(issues[0].id)}
+                  onClick={() => push(JSON.stringify(issues[0]))}
                 >
                   <b> + </b> Add new issue
                 </button>
