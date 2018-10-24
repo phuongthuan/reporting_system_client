@@ -17,8 +17,8 @@ const DailyReportPage = ({ match }) => (
       <Switch>
         <Route exact path={match.url} component={DailyReportContainer} />
         <Route path={`${match.path}/new`} component={CreateDailyReportContainer} />
-        <Route path={`${match.path}/edit/:id`} component={UpdateDailyReportContainer} />
-        <Route path={`${match.path}/:id`} component={DailyReportDetailContainer} />
+        <Route path={`${match.path}/edit/:id`} render={(props) => <UpdateDailyReportContainer {...props} />} />
+        <Route path={`${match.path}/:id`} render={(props) => <DailyReportDetailContainer {...props} />} />
         <Route component={NoMatch} />
       </Switch>
     </RightContent>
