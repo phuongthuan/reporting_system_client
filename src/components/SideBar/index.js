@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import User from 'components/User';
 import SignOut from '../SignOut';
 import { SideBarWrapper } from '../../styles/Sidebar';
+import Spinner from '../Spinner';
 
 const SideBar = () => (
   <User>
     {({ data, loading, error }) => (
       <Fragment>
-        {loading && <div>Loading...</div>}
+        {loading && <Spinner />}
         {error && <div>Error: {error.message}</div>}
 
         <SideBarWrapper>

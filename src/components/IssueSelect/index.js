@@ -42,7 +42,7 @@ const IssueSelect = ({ values }) => (
                             key={issue.id}
                             value={JSON.stringify(issue)}
                           >
-                            {issue.name} (ID: {issue.id})
+                            {issue.name}
                           </option>
                         ))}
                       </Field>

@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { Icon } from 'semantic-ui-react';
 import { IconBtn } from 'components/Shared/Reports/styles';
+import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 
 export const DELETE_DAILY_REPORT_MUTATION = gql`
   mutation DELETE_DAILY_REPORT_MUTATION($id: ID!) {
@@ -21,7 +22,21 @@ class DeleteBtn extends Component {
   render() {
     const { report } = this.props;
     return (
-      <Mutation mutation={DELETE_DAILY_REPORT_MUTATION}>
+      <Mutation
+        mutation={DELETE_DAILY_REPORT_MUTATION}
+        update={( store, { data: { deleteDailyReport } }) => {
+          const data = store.readQuery({ query: DAILY_REPORTS_QUERY });
+          data.userReports = data.userReports.filter(report => report.id !== deleteDailyReport.id);
+          store.writeQuery({ query: DAILY_REPORTS_QUERY, data });
+        }}
+        optimisticResponse={{
+          __typename: 'Mutation',
+          deleteDailyReport: {
+            __typename: 'DailyReport',
+            id: report.id
+          }
+        }}
+      >
         {(deleteDailyReport, { error }) => {
           { error && <p>Error: {error.message}</p> }
 
@@ -33,7 +48,9 @@ class DeleteBtn extends Component {
                 color="red"
                 name="trash alternate"
                 onClick={() => {
-                  this.handleDelete(deleteDailyReport, report);
+                  if (confirm('Are you sure you want to delete this daily report?')) {
+                    this.handleDelete(deleteDailyReport, report);
+                  }
                 }}
               />
             </IconBtn>
