@@ -12,6 +12,7 @@ const TextInput = ({
   id,
   label,
   value,
+  defaultValue,
   error,
   onChange,
   className,
@@ -33,6 +34,7 @@ const TextInput = ({
           type={type}
           autoComplete="off"
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           {...props}
         />
@@ -53,6 +55,7 @@ const TextInput = ({
           type={type}
           autoComplete="off"
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           {...props}
         />

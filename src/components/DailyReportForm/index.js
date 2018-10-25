@@ -8,6 +8,9 @@ import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
 import IssueSelect from '../IssueSelect';
 import { parseToArrayOfObject } from '../../utils/parseToArrayOfObject';
+import { CenterWrapper } from '../../styles/App';
+import history from '../../utils/history';
+import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 
 const CREATE_DAILY_REPORT_MUTATION = gql`
 
@@ -38,22 +41,23 @@ const DailyReportSchema = Yup.object().shape({
   achievement: Yup.string()
     .required('Achievement is required.'),
   plan: Yup.string()
-    .required('Plan is required.'),
-  // issues: Yup.array()
-  //   .of(
-  //     Yup.object().shape({
-  //       name: Yup.string().required('Required.')
-  //     })
-  //   )
+    .required('Plan is required.')
 });
 
-const DailyReportForm = () => (
-  <Mutation mutation={CREATE_DAILY_REPORT_MUTATION}>
-    {(createDailyReport, { loading, error }) => (
-      <div>
-        {loading && <div>Loading...</div>}
-        {error && <div>error</div>}
 
+const DailyReportForm = () => (
+  <Mutation
+    mutation={CREATE_DAILY_REPORT_MUTATION}
+    onCompleted={() => history.push('/reports')}
+    update={(store, { data: { createDailyReport } }) => {
+      const data = store.readQuery({ query: DAILY_REPORTS_QUERY });
+      data.userReports.push(createDailyReport);
+      store.writeQuery({ query: DAILY_REPORTS_QUERY, data });
+    }}
+  >
+    {(createDailyReport, { loading, error }) => (
+      <CenterWrapper>
+        {error && <div>error</div>}
         <Formik
           initialValues={{
             title: '',
@@ -150,7 +154,7 @@ const DailyReportForm = () => (
             </form>
           )}
         />
-      </div>
+      </CenterWrapper>
     )}
   </Mutation>
 );
