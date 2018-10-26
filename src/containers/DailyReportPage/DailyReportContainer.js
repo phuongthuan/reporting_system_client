@@ -2,7 +2,6 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import isEmpty from 'lodash/isEmpty';
-
 import { Icon, Header, Divider } from 'semantic-ui-react';
 import DeleteBtn from 'components/DeleteBtn';
 import {
@@ -15,6 +14,7 @@ import {
   IssueTag,
   IconBtn
 } from 'components/Shared/Reports/styles';
+import history from '../../utils/history';
 import { ContentWrapper } from '../../styles/App';
 import { headerItems } from './constants';
 import formatDate from '../../utils/formatDate';
@@ -38,7 +38,7 @@ const DAILY_REPORTS_QUERY = gql`
   }
 `;
 
-const DailyReportContainer = () => (
+const DailyReportContainer = ({ match }) => (
   <Query query={DAILY_REPORTS_QUERY}>
     {({ data, error, loading }) => {
       { loading && <p>Loading...</p> }
@@ -54,7 +54,7 @@ const DailyReportContainer = () => (
       return (
         <ContentWrapper>
           <Header>
-            Your Daily Reports
+              Your Daily Reports
           </Header>
           <Divider/>
           <SearchInput
@@ -85,7 +85,11 @@ const DailyReportContainer = () => (
                 </ReportsRowColumn>
                 <ReportsRowColumn>
                   <IconBtn>
-                    <Icon name="edit outline" bordered />
+                    <Icon
+                      name="edit"
+                      bordered
+                      onClick={() => history.push(`${match.path}/edit/${report.id}`)}
+                    />
                   </IconBtn>
 
                   <DeleteBtn report={report} />
@@ -100,3 +104,4 @@ const DailyReportContainer = () => (
 );
 
 export default DailyReportContainer;
+export { DAILY_REPORTS_QUERY };

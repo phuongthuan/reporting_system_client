@@ -1,12 +1,17 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
-import { Query, Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import * as Yup from 'yup';
 import TextInput from '../TextInput';
 import TextArea from '../TextArea';
 import IssueSelect from '../IssueSelect';
 import AsyncButton from '../AsyncButton';
 import { parseToArrayOfObject } from '../../utils/parseToArrayOfObject';
+import Spinner from '../Spinner';
+import { CenterWrapper } from '../../styles/App';
+import history from '../../utils/history';
+import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 
 const SINGLE_REPORT_QUERY = gql`
   query SINGLE_REPORT_QUERY($id: ID!) {
@@ -46,9 +51,27 @@ const UPDATE_DAILY_REPORT_QUERY = gql`
       comment: $comment
     ) {
       id
+      title
+      achievement
+      issues {
+        id
+        name
+      }
+      plan
+      description
+      comment
     }
   }
 `;
+
+const DailyReportSchema = Yup.object().shape({
+  title: Yup.string()
+    .required('Title is required.'),
+  achievement: Yup.string()
+    .required('Achievement is required.'),
+  plan: Yup.string()
+    .required('Plan is required.')
+});
 
 const DailyReportFormUpdate = ({ match }) => (
   <Query
@@ -58,7 +81,8 @@ const DailyReportFormUpdate = ({ match }) => (
     }}
   >
     {({ data, loading }) =>{
-      if (loading) return <div>Loading...</div>;
+
+      if (loading) return <Spinner />;
       if (!data.dailyReport) return <div>Daily Report Not Found for ID {match.params.id}</div>;
 
       const { title, achievement, issues, plan, description, comment } = data.dailyReport;
@@ -66,10 +90,19 @@ const DailyReportFormUpdate = ({ match }) => (
       return (
         <Mutation
           mutation={UPDATE_DAILY_REPORT_QUERY}
+          onCompleted={() => history.push('/reports')}
+          update={(store, { data: { updateDailyReport } }) => {
+            const data = store.readQuery({ query: DAILY_REPORTS_QUERY });
+            data.userReports = data.userReports.map(report => report.id === updateDailyReport.id
+              ? updateDailyReport
+              : report
+            );
+            store.writeQuery({ query: DAILY_REPORTS_QUERY, data });
+          }}
         >
           {( updateDailyReport, { loading, error }) => (
-            <Fragment>
-              {loading && <div>Loading...</div>}
+            <CenterWrapper>
+
               {error && <div>error</div>}
 
               <Formik
@@ -82,6 +115,7 @@ const DailyReportFormUpdate = ({ match }) => (
                   comment
                 }}
                 enableReinitialize
+                validationSchema={DailyReportSchema}
                 onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
 
                   const { title, achievement, plan, description, comment } = values;
@@ -114,7 +148,7 @@ const DailyReportFormUpdate = ({ match }) => (
                       type="text"
                       label="Title"
                       name="title"
-                      value={values.title || ''}
+                      defaultValue={values.title}
                       error={touched.title && errors.title}
                       onChange={handleChange}
                     />
@@ -123,7 +157,7 @@ const DailyReportFormUpdate = ({ match }) => (
                       type="textarea"
                       label="Today Achievement"
                       name="achievement"
-                      value={values.achievement || ''}
+                      defaultValue={values.achievement}
                       error={touched.achievement && errors.achievement}
                       onChange={handleChange}
                     />
@@ -134,7 +168,7 @@ const DailyReportFormUpdate = ({ match }) => (
                       type="textarea"
                       label="Plan for next day"
                       name="plan"
-                      value={values.plan || ''}
+                      defaultValue={values.plan}
                       error={touched.plan && errors.plan}
                       onChange={handleChange}
                     />
@@ -143,7 +177,7 @@ const DailyReportFormUpdate = ({ match }) => (
                       type="textarea"
                       label="Description"
                       name="description"
-                      value={values.description || ''}
+                      defaultValue={values.description}
                       error={touched.description && errors.description}
                       onChange={handleChange}
                     />
@@ -152,7 +186,7 @@ const DailyReportFormUpdate = ({ match }) => (
                       type="textarea"
                       label="Comment"
                       name="comment"
-                      value={values.comment || ''}
+                      defaultValue={values.comment}
                       error={touched.comment && errors.comment}
                       onChange={handleChange}
                     />
@@ -165,12 +199,12 @@ const DailyReportFormUpdate = ({ match }) => (
                   </form>
                 )}
               />
-            </Fragment>
+            </CenterWrapper>
           )}
         </Mutation>
       )
     }}
   </Query>
-);
+)
 
 export default DailyReportFormUpdate;

@@ -3,8 +3,7 @@ import styled, { css } from 'react-emotion';
 export const TextAreaStyles = styled.textarea`
   border: 1px solid black;
   display: block;
-  width: 100%;
-  max-width: 500px;
+  width: 720px;
   padding: 0.3em;
   
   ${props => props.error && css`
@@ -29,4 +28,6 @@ export const LabelStyle = styled.label`
 
 export const FormGroup = styled.div`
   margin-bottom: 1em;
+  width: 100%;
+  max-width: 1000px;
 `;

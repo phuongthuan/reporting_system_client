@@ -5,14 +5,19 @@ export const MainWrapper = styled.div`
 `;
 
 export const LeftContent = styled.div`
-  width: 15%;
+  width: 10%;
 `;
 
 export const RightContent = styled.div`
-  width: 85%;
+  width: 90%;
   padding: 1em;
 `;
 
 export const ContentWrapper = styled.div`
   width: 100%;
+`;
+
+export const CenterWrapper = styled.div`
+  display: flex;
+  height: 100vh;
 `;
