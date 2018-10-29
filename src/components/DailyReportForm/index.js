@@ -6,8 +6,6 @@ import { Mutation } from 'react-apollo';
 import TextArea from '../TextArea';
 import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
-import IssueSelect from '../IssueSelect';
-import { parseToArrayOfObject } from '../../utils/parseToArrayOfObject';
 import { CenterWrapper } from '../../styles/App';
 import history from '../../utils/history';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
@@ -17,17 +15,13 @@ const CREATE_DAILY_REPORT_MUTATION = gql`
   mutation CREATE_DAILY_REPORT_MUTATION (
     $title: String!
     $achievement: String
-    $issues: [IssueInput!]
     $plan: String!
-    $description: String
     $comment: String
   ) {
     createDailyReport(
       title: $title
       achievement: $achievement
-      issues: $issues
       plan: $plan
-      description: $description
       comment: $comment
     ) {
       id
@@ -62,26 +56,20 @@ const DailyReportForm = () => (
           initialValues={{
             title: '',
             achievement: '',
-            issues: [],
             plan: '',
-            description: '',
             comment: ''
           }}
           enableReinitialize
           validationSchema={DailyReportSchema}
           onSubmit={async (values, { setSubmitting, setStatus, setErrors, resetForm }) => {
-            const { title, achievement, plan, description, comment } = values;
-
-            const issues = parseToArrayOfObject(values.issues);
+            const { title, achievement, plan, comment } = values;
 
             try {
               await createDailyReport({
                 variables: {
                   title,
                   achievement,
-                  issues,
                   plan,
-                  description,
                   comment
                 }
               });
@@ -117,23 +105,12 @@ const DailyReportForm = () => (
                 onChange={handleChange}
               />
 
-              <IssueSelect values={values || ''} />
-
               <TextArea
                 type="textarea"
                 label="Plan for next day"
                 name="plan"
                 value={values.plan || ''}
                 error={touched.plan && errors.plan}
-                onChange={handleChange}
-              />
-
-              <TextArea
-                type="textarea"
-                label="Description"
-                name="description"
-                value={values.description || ''}
-                error={touched.description && errors.description}
                 onChange={handleChange}
               />
 

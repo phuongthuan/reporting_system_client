@@ -11,7 +11,6 @@ import {
   ReportsHeaderColumn,
   ReportsRow,
   ReportsRowColumn,
-  IssueTag,
   IconBtn
 } from 'components/Shared/Reports/styles';
 import history from '../../utils/history';
@@ -27,13 +26,8 @@ const DAILY_REPORTS_QUERY = gql`
       title
       achievement
       plan
-      description
       comment
       createdAt
-      issues {
-        id
-        name
-      }
     }
   }
 `;
@@ -74,12 +68,7 @@ const DailyReportContainer = ({ match }) => (
                 <ReportsRowColumn>{i + 1}</ReportsRowColumn>
                 <ReportsRowColumn>{report.emotion}</ReportsRowColumn>
                 <ReportsRowColumn>{report.title}</ReportsRowColumn>
-                <ReportsRowColumn>
-                  {report.issues &&
-                    report.issues.map(issue => (
-                      <IssueTag key={issue.id}>{issue.name}</IssueTag>
-                    ))}
-                </ReportsRowColumn>
+                <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
                 <ReportsRowColumn>
                   {formatDate(report.createdAt)}
                 </ReportsRowColumn>

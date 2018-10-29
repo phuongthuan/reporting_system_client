@@ -5,9 +5,7 @@ import gql from 'graphql-tag';
 import * as Yup from 'yup';
 import TextInput from '../TextInput';
 import TextArea from '../TextArea';
-import IssueSelect from '../IssueSelect';
 import AsyncButton from '../AsyncButton';
-import { parseToArrayOfObject } from '../../utils/parseToArrayOfObject';
 import Spinner from '../Spinner';
 import { CenterWrapper } from '../../styles/App';
 import history from '../../utils/history';
@@ -19,13 +17,7 @@ const SINGLE_REPORT_QUERY = gql`
       id
       title
       achievement
-      issues {
-        id
-        name
-        description
-      }
       plan
-      description
       comment
     }
   }
@@ -36,29 +28,20 @@ const UPDATE_DAILY_REPORT_QUERY = gql`
     $id: ID!
     $title: String!
     $achievement: String
-    $issues: [IssueInput!]
     $plan: String!
-    $description: String
     $comment: String
   ) {
     updateDailyReport(
       id: $id
       title: $title
       achievement: $achievement
-      issues: $issues
       plan: $plan
-      description: $description
       comment: $comment
     ) {
       id
       title
       achievement
-      issues {
-        id
-        name
-      }
       plan
-      description
       comment
     }
   }
@@ -85,7 +68,7 @@ const DailyReportFormUpdate = ({ match }) => (
       if (loading) return <Spinner />;
       if (!data.dailyReport) return <div>Daily Report Not Found for ID {match.params.id}</div>;
 
-      const { title, achievement, issues, plan, description, comment } = data.dailyReport;
+      const { title, achievement, plan, comment } = data.dailyReport;
 
       return (
         <Mutation
@@ -109,17 +92,14 @@ const DailyReportFormUpdate = ({ match }) => (
                 initialValues={{
                   title,
                   achievement,
-                  issues,
                   plan,
-                  description,
                   comment
                 }}
                 enableReinitialize
                 validationSchema={DailyReportSchema}
                 onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
 
-                  const { title, achievement, plan, description, comment } = values;
-                  const issues = parseToArrayOfObject(values.issues);
+                  const { title, achievement, plan, comment } = values;
 
                   try {
                     await updateDailyReport({
@@ -127,9 +107,7 @@ const DailyReportFormUpdate = ({ match }) => (
                         id: match.params.id,
                         title,
                         achievement,
-                        issues,
                         plan,
-                        description,
                         comment
                       }
                     });
@@ -162,23 +140,12 @@ const DailyReportFormUpdate = ({ match }) => (
                       onChange={handleChange}
                     />
 
-                    <IssueSelect values={values} />
-
                     <TextArea
                       type="textarea"
                       label="Plan for next day"
                       name="plan"
                       defaultValue={values.plan}
                       error={touched.plan && errors.plan}
-                      onChange={handleChange}
-                    />
-
-                    <TextArea
-                      type="textarea"
-                      label="Description"
-                      name="description"
-                      defaultValue={values.description}
-                      error={touched.description && errors.description}
                       onChange={handleChange}
                     />
 
