@@ -29,6 +29,13 @@ class DeleteBtn extends Component {
           data.userReports = data.userReports.filter(report => report.id !== deleteDailyReport.id);
           store.writeQuery({ query: DAILY_REPORTS_QUERY, data });
         }}
+        optimisticResponse={{
+          __typename: 'Mutation',
+          deleteDailyReport: {
+            __typename: 'DailyReport',
+            id: report.id
+          }
+        }}
       >
         {(deleteDailyReport, { error }) => {
           { error && <p>Error: {error.message}</p> }
