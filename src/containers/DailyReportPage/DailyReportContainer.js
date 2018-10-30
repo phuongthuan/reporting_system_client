@@ -2,6 +2,7 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import isEmpty from 'lodash/isEmpty';
+import { Emoji } from 'emoji-mart';
 import { Icon, Header, Divider } from 'semantic-ui-react';
 import DeleteBtn from 'components/DeleteBtn';
 import {
@@ -13,6 +14,7 @@ import {
   ReportsRowColumn,
   IconBtn
 } from 'components/Shared/Reports/styles';
+import Spinner from 'components/Spinner';
 import history from '../../utils/history';
 import { ContentWrapper } from '../../styles/App';
 import { headerItems } from './constants';
@@ -35,8 +37,11 @@ const DAILY_REPORTS_QUERY = gql`
 const DailyReportContainer = ({ match }) => (
   <Query query={DAILY_REPORTS_QUERY}>
     {({ data, error, loading }) => {
-      { loading && <p>Loading...</p> }
-      { error && <p>Error: {error.message}</p> }
+
+      if (loading) return <Spinner />;
+
+      if (error) return <p>Error: {error.message}</p>;
+
       if (isEmpty(data.userReports)) {
         return (
           <ContentWrapper>
@@ -66,9 +71,15 @@ const DailyReportContainer = ({ match }) => (
             {data.userReports.map((report, i) => (
               <ReportsRow key={report.id}>
                 <ReportsRowColumn>{i + 1}</ReportsRowColumn>
-                <ReportsRowColumn>{report.emotion}</ReportsRowColumn>
+                <ReportsRowColumn>
+                  <Emoji
+                    emoji={report.emotion}
+                    size={24}
+                  />
+                </ReportsRowColumn>
                 <ReportsRowColumn>{report.title}</ReportsRowColumn>
                 <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
+                {/*<ReportsRowColumn>{report.plan}</ReportsRowColumn>*/}
                 <ReportsRowColumn>
                   {formatDate(report.createdAt)}
                 </ReportsRowColumn>

@@ -8,7 +8,7 @@ class CreateDailyReportContainer extends Component {
     return (
       <ContentWrapper>
         <Header>
-          Create New Daily Report
+          New Daily Report
         </Header>
         <Divider/>
         <DailyReportForm />

@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react'
-import isEmpty from 'lodash/isEmpty'
+import React from 'react'
+import isEmpty from 'lodash/isEmpty';
 import {
-  TextAreaStyles,
   TextError,
   FormGroup,
-  LabelStyle
-} from '../../styles/TextArea';
+  FormFieldStyles,
+  TextAreaStyles
+} from '../../styles/App';
 
 const TextArea = ({
   id,
@@ -18,13 +18,10 @@ const TextArea = ({
   ...props
 }) => (
   <FormGroup className={className}>
-
     {isEmpty(error) ? (
-      <Fragment>
-        {(label) && (
-          <LabelStyle htmlFor={id} {...props}>{label}</LabelStyle>
-        )}
+      <FormFieldStyles>
         <TextAreaStyles
+          label={label}
           id={id}
           rows="5"
           cols="30"
@@ -33,14 +30,12 @@ const TextArea = ({
           onChange={onChange}
           {...props}
         />
-      </Fragment>
+      </FormFieldStyles>
     ) : (
-      <Fragment>
-        {(label) && (
-          <LabelStyle error={error} htmlFor={id} {...props}>{label}</LabelStyle>
-        )}
+      <FormFieldStyles>
         <TextAreaStyles
-          error={error}
+          error={!!error}
+          label={label}
           id={id}
           rows="5"
           cols="30"
@@ -49,7 +44,7 @@ const TextArea = ({
           onChange={onChange}
           {...props}
         />
-      </Fragment>
+      </FormFieldStyles>
     )}
     {error && <TextError>{error}</TextError>}
   </FormGroup>

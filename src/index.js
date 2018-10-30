@@ -10,7 +10,7 @@ import history from './utils/history';
 
 import 'semantic-ui-css/semantic.min.css';
 import './ress.min.css';
-import './common.style';
+// import './common.style';
 
 const uri = process.env.NODE_ENV === 'production'
   ? 'Set uri for production here'

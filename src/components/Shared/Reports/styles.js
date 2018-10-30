@@ -3,7 +3,7 @@ import { Input } from 'semantic-ui-react';
 
 const SearchInput = styled(Input)`
   border-radius: 5px;
-  font-size: 0.7rem;
+  font-size: 1rem;
   margin-top: 40px;
   width: 33%;
 
@@ -28,12 +28,12 @@ const ReportsHeader = styled.div`
 
 const ReportsHeaderColumn = styled.div`
   margin-right: 0.2rem;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: bold;
 `;
 
 const ReportsRow = styled.div`
-  font-size: 0.7rem;
+  font-size: 1rem;
   display: grid;
   width: 100%;
   grid-template-columns: 1fr 1fr 4fr 4fr 4fr 2fr;
@@ -50,7 +50,7 @@ const ReportsRow = styled.div`
 
 const ReportsRowColumn = styled.div`
   margin-right: 0.2rem;
-  font-size: 0.7rem;
+  font-size: 1rem;
 `;
 
 const IssueTag = styled.button`
