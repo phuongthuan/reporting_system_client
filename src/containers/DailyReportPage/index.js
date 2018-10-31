@@ -15,10 +15,16 @@ const DailyReportPage = ({ match }) => (
     </LeftContent>
     <RightContent>
       <Switch>
-        <Route exact path={match.url} component={DailyReportContainer} />
+        <Route exact path={match.url} render={props => <DailyReportContainer {...props} />} />
         <Route path={`${match.path}/new`} component={CreateDailyReportContainer} />
-        <Route path={`${match.path}/edit/:id`} render={(props) => <UpdateDailyReportContainer {...props} />} />
-        <Route path={`${match.path}/:id`} render={(props) => <DailyReportDetailContainer {...props} />} />
+        <Route
+          path={`${match.path}/edit/:id`}
+          render={props => <UpdateDailyReportContainer {...props} />}
+        />
+        <Route
+          path={`${match.path}/:id`}
+          render={props => <DailyReportDetailContainer {...props} />}
+        />
         <Route component={NoMatch} />
       </Switch>
     </RightContent>

@@ -28,12 +28,12 @@ const SINGLE_REPORT_QUERY = gql`
 
 const UPDATE_DAILY_REPORT_QUERY = gql`
   mutation UPDATE_DAILY_REPORT_QUERY(
-  $id: ID!
-  $title: String
-  $emotion: String
-  $achievement: String
-  $plan: String
-  $comment: String
+    $id: ID!
+    $title: String
+    $emotion: String
+    $achievement: String
+    $plan: String
+    $comment: String
   ) {
     updateDailyReport(
       id: $id
@@ -55,14 +55,10 @@ const UPDATE_DAILY_REPORT_QUERY = gql`
 `;
 
 const DailyReportSchema = Yup.object().shape({
-  title: Yup.string()
-    .required('Title is required.'),
-  emotion: Yup.string()
-    .required('Emotion option is required'),
-  achievement: Yup.string()
-    .required('Achievement is required.'),
-  plan: Yup.string()
-    .required('Plan is required.')
+  title: Yup.string().required('Title is required.'),
+  emotion: Yup.string().required('Emotion option is required'),
+  achievement: Yup.string().required('Achievement is required.'),
+  plan: Yup.string().required('Plan is required.')
 });
 
 const DailyReportFormUpdate = ({ match }) => (
@@ -73,8 +69,7 @@ const DailyReportFormUpdate = ({ match }) => (
     }}
   >
     {({ data, loading }) => {
-
-      if (loading) return <Spinner/>;
+      if (loading) return <Spinner />;
       if (!data.dailyReport) return <div>Daily Report Not Found for ID {match.params.id}</div>;
 
       const { title, emotion, achievement, plan, comment } = data.dailyReport;
@@ -83,11 +78,10 @@ const DailyReportFormUpdate = ({ match }) => (
         <Mutation
           mutation={UPDATE_DAILY_REPORT_QUERY}
           update={(store, { data: { updateDailyReport } }) => {
-            if(store.data.data.ROOT_QUERY.userReports){
+            if (store.data.data.ROOT_QUERY.userReports) {
               const data = store.readQuery({ query: DAILY_REPORTS_QUERY });
-              data.userReports = data.userReports.map(report => report.id === updateDailyReport.id
-                ? updateDailyReport
-                : report
+              data.userReports.dailyReports = data.userReports.dailyReports.map(
+                report => (report.id === updateDailyReport.id ? updateDailyReport : report)
               );
               store.writeQuery({ query: DAILY_REPORTS_QUERY, data });
             }
@@ -95,7 +89,6 @@ const DailyReportFormUpdate = ({ match }) => (
         >
           {(updateDailyReport, { loading, error }) => (
             <CenterWrapper>
-
               {error && <div>error</div>}
 
               <Formik
@@ -109,7 +102,6 @@ const DailyReportFormUpdate = ({ match }) => (
                 enableReinitialize
                 validationSchema={DailyReportSchema}
                 onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
-
                   const { title, emotion, achievement, plan, comment } = values;
 
                   try {
@@ -127,17 +119,15 @@ const DailyReportFormUpdate = ({ match }) => (
                   } catch (error) {
                     setStatus({ success: false });
                     setSubmitting(false);
-                    setErrors({ submit: error.message })
+                    setErrors({ submit: error.message });
                   }
                 }}
-
                 render={({ values, handleSubmit, handleChange, touched, errors, status }) => (
                   <Form
                     onSubmit={handleSubmit}
                     loading={loading}
                     success={status ? status.success : false}
                   >
-
                     <TextInput
                       type="text"
                       label="Title"
@@ -205,20 +195,20 @@ const DailyReportFormUpdate = ({ match }) => (
                       onChange={handleChange}
                     />
 
-                    <Message success header='Update Successfully!' content="Your report has been updated." />
-
-                    <AsyncButton
-                      buttonName="Update"
-                      type="submit"
-                      loading={loading}
+                    <Message
+                      success
+                      header="Update Successfully!"
+                      content="Your report has been updated."
                     />
+
+                    <AsyncButton buttonName="Update" type="submit" loading={loading} />
                   </Form>
                 )}
               />
             </CenterWrapper>
           )}
         </Mutation>
-      )
+      );
     }}
   </Query>
 );

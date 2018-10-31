@@ -7,9 +7,11 @@ export const MainWrapper = styled.div`
 
 export const LeftContent = styled.div`
   width: 15%;
+  position: fixed;
 `;
 
 export const RightContent = styled.div`
+  margin-left: 15%;
   width: 85%;
   padding: 1em;
 `;

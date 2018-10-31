@@ -13,7 +13,7 @@ class AuthContainer extends Component {
         <Mutation
           mutation={LOGIN_MUTATION}
           refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-          onCompleted={() => history.push('/profile/edit')}
+          onCompleted={() => history.push('/reports')}
         >
           {(authenticate, { loading, error }) => (
             <div>
