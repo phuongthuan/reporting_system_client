@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { Emoji } from 'emoji-mart';
 import queryString from 'query-string';
-import { Icon, Header, Divider } from 'semantic-ui-react';
+import { Divider, Header, Icon } from 'semantic-ui-react';
 import DeleteBtn from 'components/DeleteBtn';
 import {
-  SearchInput,
-  ReportsTable,
+  IconBtn,
   ReportsHeader,
   ReportsHeaderColumn,
   ReportsRow,
   ReportsRowColumn,
-  IconBtn
+  ReportsTable,
+  SearchInput
 } from 'components/Shared/Reports/styles';
 import Spinner from 'components/Spinner';
 import gql from 'graphql-tag';
-import { Query, graphql, compose } from 'react-apollo';
+import { compose, graphql, Query } from 'react-apollo';
 import history from '../../utils/history';
-import { ContentWrapper } from '../../styles/App';
+import { ContentWrapper, SpinnerWrapper } from '../../styles/App';
 import { headerItems, itemsAmount } from './constants';
 import formatDate from '../../utils/formatDate';
 
@@ -79,10 +79,8 @@ class DailyReportContainer extends Component {
   getQueryVariables = () => {
     const currentPage = queryString.parse(this.props.location.search).page;
     const skip = currentPage ? (currentPage - 1) * itemsAmount : 0;
-    const first = itemsAmount;
-
     return {
-      first,
+      first: itemsAmount,
       skip
     };
   };
@@ -92,8 +90,17 @@ class DailyReportContainer extends Component {
     return (
       <Query query={DAILY_REPORTS_QUERY} variables={this.getQueryVariables()}>
         {({ data, loading, error }) => {
-          if (loading) return <Spinner />;
+
+          if (loading) {
+            return (
+              <SpinnerWrapper bgColor="#FFFFFF">
+                <Spinner />
+              </SpinnerWrapper>
+            )
+          }
+
           if (error) return <p>error: {error.message}</p>;
+
           if (isEmpty(data)) {
             return (
               <ContentWrapper>
@@ -125,11 +132,20 @@ class DailyReportContainer extends Component {
                   <ReportsRow key={report.id}>
                     <ReportsRowColumn>{i + 1}</ReportsRowColumn>
                     <ReportsRowColumn>
-                      <Emoji emoji={report.emotion} size={24} />
+                      <Emoji
+                        emoji={report.emotion}
+                        size={24}
+                      />
                     </ReportsRowColumn>
-                    <ReportsRowColumn>{report.title}</ReportsRowColumn>
+                    <ReportsRowColumn
+                      onClick={() => history.push(`${match.path}/${report.id}`)}
+                    >
+                      {report.title}
+                    </ReportsRowColumn>
                     <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
-                    <ReportsRowColumn>{formatDate(report.createdAt)}</ReportsRowColumn>
+                    <ReportsRowColumn>
+                      {formatDate(report.createdAt)}
+                    </ReportsRowColumn>
                     <ReportsRowColumn>
                       <IconBtn>
                         <Icon

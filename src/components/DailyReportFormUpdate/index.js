@@ -12,47 +12,7 @@ import { CenterWrapper } from '../../styles/App';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 import RadioButton from '../RadioButton';
 import RadioInput from '../RadioInput';
-
-const SINGLE_REPORT_QUERY = gql`
-  query SINGLE_REPORT_QUERY($id: ID!) {
-    dailyReport(where: { id: $id }) {
-      id
-      title
-      emotion
-      achievement
-      plan
-      comment
-    }
-  }
-`;
-
-const UPDATE_DAILY_REPORT_QUERY = gql`
-  mutation UPDATE_DAILY_REPORT_QUERY(
-    $id: ID!
-    $title: String
-    $emotion: String
-    $achievement: String
-    $plan: String
-    $comment: String
-  ) {
-    updateDailyReport(
-      id: $id
-      title: $title
-      emotion: $emotion
-      achievement: $achievement
-      plan: $plan
-      comment: $comment
-    ) {
-      id
-      title
-      emotion
-      achievement
-      plan
-      comment
-      createdAt
-    }
-  }
-`;
+import { SINGLE_REPORT_QUERY } from '../../containers/DailyReportPage/DailyReportDetailContainer';
 
 const DailyReportSchema = Yup.object().shape({
   title: Yup.string().required('Title is required.'),
@@ -212,5 +172,33 @@ const DailyReportFormUpdate = ({ match }) => (
     }}
   </Query>
 );
+
+const UPDATE_DAILY_REPORT_QUERY = gql`
+  mutation UPDATE_DAILY_REPORT_QUERY(
+  $id: ID!
+  $title: String
+  $emotion: String
+  $achievement: String
+  $plan: String
+  $comment: String
+  ) {
+    updateDailyReport(
+      id: $id
+      title: $title
+      emotion: $emotion
+      achievement: $achievement
+      plan: $plan
+      comment: $comment
+    ) {
+      id
+      title
+      emotion
+      achievement
+      plan
+      comment
+      createdAt
+    }
+  }
+`;
 
 export default DailyReportFormUpdate;

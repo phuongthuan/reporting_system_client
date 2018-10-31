@@ -47,3 +47,11 @@ export const TextAreaStyles = styled(Form.TextArea)`
 export const TextInputStyles = styled(Form.Input)`
   width: 720px;
 `;
+
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: ${props => props.bgColor || '#3a405a'};
+`;

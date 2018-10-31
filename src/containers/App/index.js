@@ -3,8 +3,25 @@ import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import PrivateRoute from '../../utils/PrivateRoute';
 import NoMatch from '../../utils/NoMatch';
+import RouteSpinner from '../../components/RouteSpinner';
 
-const loading = () => <div>Loading...</div>;
+
+/**
+ * @return {null}
+ */
+function Loading(props) {
+  if (props.error) {
+    return <div>Error! <button onClick={props.retry}>Retry</button></div>;
+  } else if (props.timedOut) {
+    return <div>Taking a long time... <button onClick={props.retry}>Retry</button></div>;
+  } else if (props.pastDelay) {
+    return <RouteSpinner />;
+  } else {
+    return null;
+  }
+}
+
+const loading = () => <div>Loadable Loading...</div>;
 
 const HomePage = Loadable({
   loader: () => import('containers/HomePage'),
@@ -23,12 +40,14 @@ const MemberPage = Loadable({
 
 const DailyReportPage = Loadable({
   loader: () => import('containers/DailyReportPage'),
-  loading
+  loading: Loading,
+  delay: 300,
 });
 
 const ProfilePage = Loadable({
   loader: () => import('containers/ProfilePage'),
-  loading
+  loading: Loading,
+  delay: 300,
 });
 
 const AdminPage = Loadable({
@@ -39,8 +58,8 @@ const AdminPage = Loadable({
 const App = () => (
   <div className="App">
     <Switch>
-      <PrivateRoute location={location} exact path="/" component={HomePage}/>
       <Route location={location} path="/auth" component={AuthPage}/>
+      <PrivateRoute location={location} exact path="/" component={HomePage}/>
       <PrivateRoute location={location} path="/members" component={MemberPage}/>
       <PrivateRoute location={location} path="/reports" component={DailyReportPage}/>
       <PrivateRoute location={location} path="/profile" component={ProfilePage}/>

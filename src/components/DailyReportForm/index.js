@@ -14,32 +14,6 @@ import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyRepor
 import RadioButton from '../RadioButton';
 import { updateDailyReportCacheVariables } from '../../utils/updateDailyReportCacheVariables';
 
-const CREATE_DAILY_REPORT_MUTATION = gql`
-  mutation CREATE_DAILY_REPORT_MUTATION(
-    $title: String!
-    $emotion: String!
-    $achievement: String!
-    $plan: String!
-    $comment: String
-  ) {
-    createDailyReport(
-      title: $title
-      emotion: $emotion
-      achievement: $achievement
-      plan: $plan
-      comment: $comment
-    ) {
-      id
-      title
-      emotion
-      achievement
-      plan
-      comment
-      createdAt
-    }
-  }
-`;
-
 const DailyReportSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   emotion: Yup.string().required('Emotion option is required'),
@@ -47,7 +21,8 @@ const DailyReportSchema = Yup.object().shape({
   plan: Yup.string().required('Plan is required')
 });
 
-const DailyReportForm = props => (
+
+const DailyReportForm = (props) => (
   <Mutation
     mutation={CREATE_DAILY_REPORT_MUTATION}
     update={(store, { data: { createDailyReport } }) => {
@@ -172,11 +147,15 @@ const DailyReportForm = props => (
 
               <Message
                 success
-                header="Create Successfully!"
+                header='Create Successfully!'
                 content="Your report has been created."
               />
 
-              <AsyncButton buttonName="Create" type="submit" loading={loading} />
+              <AsyncButton
+                buttonName="Create"
+                type="submit"
+                loading={loading}
+              />
             </Form>
           )}
         />
@@ -184,6 +163,33 @@ const DailyReportForm = props => (
     )}
   </Mutation>
 );
+
+const CREATE_DAILY_REPORT_MUTATION = gql`
+
+  mutation CREATE_DAILY_REPORT_MUTATION (
+  $title: String!
+  $emotion: String!
+  $achievement: String!
+  $plan: String!
+  $comment: String
+  ) {
+    createDailyReport(
+      title: $title
+      emotion: $emotion
+      achievement: $achievement
+      plan: $plan
+      comment: $comment
+    ) {
+      id
+      title
+      emotion
+      achievement
+      plan
+      comment
+      createdAt
+    }
+  }
+`;
 
 export default compose(
   graphql(USER_DAILY_REPORTS_COUNT_QUERY, {
