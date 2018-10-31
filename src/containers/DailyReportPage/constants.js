@@ -1,3 +1,4 @@
-const headerItems = ['ID', 'Emoji', 'Title', 'Today Achievement', 'Date', 'Actions'];
+const headerItems = ['No', 'Emoji', 'Title', 'Today Achievement', 'Date', 'Actions'];
+const itemsAmount = 10;
 
-export { headerItems };
+export { headerItems, itemsAmount };
