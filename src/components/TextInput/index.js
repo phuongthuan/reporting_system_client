@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import {
-  TextInputStyles,
   TextError,
   FormGroup,
-  LabelStyle
-} from '../../styles/TextInput';
+  FormFieldStyles,
+  TextInputStyles
+} from '../../styles/App';
 
 const TextInput = ({
   type,
@@ -16,21 +16,17 @@ const TextInput = ({
   error,
   onChange,
   className,
+  required,
   initStates,
   ...props
 }) => (
   <FormGroup className={className}>
     {isEmpty(error) ? (
-      <Fragment>
-        {(label) && (
-          <LabelStyle
-            htmlFor={id}
-            {...props}
-          >
-            {label}
-          </LabelStyle>
-        )}
+      <FormFieldStyles>
         <TextInputStyles
+          fluid
+          size="small"
+          label={label}
           type={type}
           autoComplete="off"
           value={value}
@@ -38,20 +34,14 @@ const TextInput = ({
           onChange={onChange}
           {...props}
         />
-      </Fragment>
+      </FormFieldStyles>
     ) : (
-      <Fragment>
-        {(label) && (
-          <LabelStyle
-            error={error}
-            htmlFor={id}
-            {...props}
-          >
-            {label}
-          </LabelStyle>
-        )}
+      <FormFieldStyles>
         <TextInputStyles
-          error={error}
+          fluid
+          error={!!error}
+          size="small"
+          label={label}
           type={type}
           autoComplete="off"
           value={value}
@@ -59,7 +49,7 @@ const TextInput = ({
           onChange={onChange}
           {...props}
         />
-      </Fragment>
+      </FormFieldStyles>
     )}
     {error && <TextError>{error}</TextError>}
   </FormGroup>

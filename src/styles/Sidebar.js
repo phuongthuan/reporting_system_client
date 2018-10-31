@@ -4,7 +4,6 @@ export const SideBarWrapper = styled.div`
   background-color: #3a405a;
   height: 100vh;
   color: #FFFFFF;
-  position: fixed;
   
   ul li {
     padding: 0.5em 2em;
