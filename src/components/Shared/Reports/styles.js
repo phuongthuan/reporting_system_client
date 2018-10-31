@@ -51,6 +51,7 @@ const ReportsRow = styled.div`
 const ReportsRowColumn = styled.div`
   margin-right: 0.2rem;
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 const IssueTag = styled.button`
