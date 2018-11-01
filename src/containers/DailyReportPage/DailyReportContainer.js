@@ -90,13 +90,12 @@ class DailyReportContainer extends Component {
     return (
       <Query query={DAILY_REPORTS_QUERY} variables={this.getQueryVariables()}>
         {({ data, loading, error }) => {
-
           if (loading) {
             return (
               <SpinnerWrapper bgColor="#FFFFFF">
                 <Spinner />
               </SpinnerWrapper>
-            )
+            );
           }
 
           if (error) return <p>error: {error.message}</p>;
@@ -132,20 +131,14 @@ class DailyReportContainer extends Component {
                   <ReportsRow key={report.id}>
                     <ReportsRowColumn>{i + 1}</ReportsRowColumn>
                     <ReportsRowColumn>
-                      <Emoji
-                        emoji={report.emotion}
-                        size={24}
-                      />
+                      <Emoji emoji={report.emotion} size={24} />
                     </ReportsRowColumn>
-                    <ReportsRowColumn
-                      onClick={() => history.push(`${match.path}/${report.id}`)}
-                    >
-                      {report.title}
+                    <ReportsRowColumn onClick={() => history.push(`${match.path}/${report.id}`)}>
+                      <a>{report.title}</a>
                     </ReportsRowColumn>
                     <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
-                    <ReportsRowColumn>
-                      {formatDate(report.createdAt)}
-                    </ReportsRowColumn>
+                    <ReportsRowColumn>{report.plan}</ReportsRowColumn>
+                    <ReportsRowColumn>{formatDate(report.createdAt)}</ReportsRowColumn>
                     <ReportsRowColumn>
                       <IconBtn>
                         <Icon
