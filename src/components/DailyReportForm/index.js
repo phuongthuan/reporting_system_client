@@ -2,6 +2,7 @@ import React from 'react';
 import { Formik, Field } from 'formik';
 import gql from 'graphql-tag';
 import * as Yup from 'yup';
+import { Persist } from 'formik-persist';
 import { Form, Message } from 'semantic-ui-react';
 import RadioInput from 'components/RadioInput';
 import { Mutation, graphql, compose } from 'react-apollo';
@@ -156,6 +157,7 @@ const DailyReportForm = (props) => (
                 type="submit"
                 loading={loading}
               />
+              <Persist name="create-daily-report-form" debounce="1000"/>
             </Form>
           )}
         />
