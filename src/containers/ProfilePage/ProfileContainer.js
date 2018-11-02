@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
+import { Divider, Header } from 'semantic-ui-react';
+import { ContentWrapper } from '../../styles/App';
+import ProfileFormUpdate from '../../components/ProfileFormUpdate';
 
 class ProfileContainer extends Component {
   render() {
     return (
-      <div>
-        Profile Edit Page Container.
-      </div>
+      <ContentWrapper>
+        <Header>
+          Update Profile
+        </Header>
+        <Divider/>
+        <ProfileFormUpdate />
+      </ContentWrapper>
     );
   }
 }
+
+
 
 export default ProfileContainer;
