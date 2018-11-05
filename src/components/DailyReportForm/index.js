@@ -7,13 +7,18 @@ import { Form, Message } from 'semantic-ui-react';
 import RadioInput from 'components/RadioInput';
 import { Mutation, graphql, compose } from 'react-apollo';
 import { USER_DAILY_REPORTS_COUNT_QUERY } from 'containers/DailyReportPage/DailyReportContainer';
+import { itemsAmount } from 'containers/DailyReportPage/constants';
 import TextArea from '../TextArea';
 import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
 import { CenterWrapper } from '../../styles/App';
-import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
+import {
+  DAILY_REPORTS_QUERY,
+  UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION
+} from '../../containers/DailyReportPage/DailyReportContainer';
+
 import RadioButton from '../RadioButton';
-import { updateDailyReportCacheVariables } from '../../utils/updateDailyReportCacheVariables';
+import getDailyReportsCacheVariables from '../../utils/getDailyReportsCacheVariables';
 
 const DailyReportSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -22,21 +27,52 @@ const DailyReportSchema = Yup.object().shape({
   plan: Yup.string().required('Plan is required')
 });
 
+function updateCacheLoop(store, variables, report) {
+  const { skip, first, orderBy } = variables;
+  let popped = '';
+  let length = '';
 
-const DailyReportForm = (props) => (
+  const arg = getDailyReportsCacheVariables(first, skip);
+
+  if (store.data.data.ROOT_QUERY[arg]) {
+    const data = store.readQuery({ query: DAILY_REPORTS_QUERY, variables });
+    data.userReports.dailyReports.unshift(report); //Add new report to listing
+    if (data.userReports.dailyReports.length > itemsAmount) {
+      popped = data.userReports.dailyReports.pop(); // remove oldest report from listing if there are more than 10 reports
+    }
+    length = data.userReports.dailyReports.length;
+    store.writeQuery({ query: DAILY_REPORTS_QUERY, data, variables });
+  }
+
+  if (length >= itemsAmount) {
+    const newVariables = {
+      skip: skip + itemsAmount,
+      first,
+      orderBy
+    };
+    // move to next loop if there are more than 10 reports in current page
+    updateCacheLoop(store, newVariables, popped);
+  }
+}
+
+const DailyReportForm = props => (
   <Mutation
     mutation={CREATE_DAILY_REPORT_MUTATION}
     update={(store, { data: { createDailyReport } }) => {
-      const count = parseInt(props.userDailyReportsCount.count);
-      const variables = updateDailyReportCacheVariables(count);
-      const { skip, first } = variables;
-      const arg = 'userReports' + '({' + '"first":' + first + ',' + '"skip":' + skip + '})';
+      const { updateUserDailyReportsCount } = props;
+      const { count } = props.userDailyReportsCount;
+      const variables = {
+        skip: 0,
+        first: itemsAmount,
+        orderBy: 'createdAt_DESC'
+      };
 
-      if (store.data.data.ROOT_QUERY[arg]) {
-        const data = store.readQuery({ query: DAILY_REPORTS_QUERY, variables });
-        data.userReports.dailyReports.push(createDailyReport);
-        store.writeQuery({ query: DAILY_REPORTS_QUERY, data, variables });
-      }
+      updateCacheLoop(store, variables, createDailyReport);
+      updateUserDailyReportsCount({
+        variables: {
+          count: count + 1
+        }
+      });
     }}
   >
     {(createDailyReport, { loading, error }) => (
@@ -148,16 +184,12 @@ const DailyReportForm = (props) => (
 
               <Message
                 success
-                header='Create Successfully!'
+                header="Create Successfully!"
                 content="Your report has been created."
               />
 
-              <AsyncButton
-                buttonName="Create"
-                type="submit"
-                loading={loading}
-              />
-              <Persist name="create-daily-report-form" debounce="1000"/>
+              <AsyncButton buttonName="Create" type="submit" loading={loading} />
+              <Persist name="create-daily-report-form" debounce="1000" />
             </Form>
           )}
         />
@@ -167,13 +199,12 @@ const DailyReportForm = (props) => (
 );
 
 const CREATE_DAILY_REPORT_MUTATION = gql`
-
-  mutation CREATE_DAILY_REPORT_MUTATION (
-  $title: String!
-  $emotion: String!
-  $achievement: String!
-  $plan: String!
-  $comment: String
+  mutation CREATE_DAILY_REPORT_MUTATION(
+    $title: String!
+    $emotion: String!
+    $achievement: String!
+    $plan: String!
+    $comment: String
   ) {
     createDailyReport(
       title: $title
@@ -198,5 +229,8 @@ export default compose(
     props: ({ data: { userDailyReportsCount } }) => ({
       userDailyReportsCount
     })
-  })
+  }),
+  graphql(UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION, { name: 'updateUserDailyReportsCount' })
 )(DailyReportForm);
+
+export { UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION };

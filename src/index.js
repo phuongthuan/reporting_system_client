@@ -64,7 +64,7 @@ const stateLink = withClientState({
   defaults: defaultState,
   resolvers: {
     Mutation: {
-      updateUserDaiyReportsCount: (_, { count }, { cache }) => {
+      initializeUserDailyReportsCount: (_, { count }, { cache }) => {
         const previousState = cache.readQuery({ query: USER_DAILY_REPORTS_COUNT_QUERY });
         if (previousState.userDailyReportsCount.isInitialized === true) return null;
 
@@ -78,6 +78,22 @@ const stateLink = withClientState({
         };
 
         cache.writeData({ query: USER_DAILY_REPORTS_COUNT_QUERY, data });
+        return null;
+      },
+      updateUserDailyReportsCount: (_, { count }, { cache }) => {
+        const previousState = cache.readQuery({ query: USER_DAILY_REPORTS_COUNT_QUERY });
+        if (previousState.userDailyReportsCount.isInitialized === false) return null;
+
+        const data = {
+          ...previousState,
+          userDailyReportsCount: {
+            __typename: 'UserDailyReportsCount',
+            count
+          }
+        };
+
+        cache.writeData({ query: USER_DAILY_REPORTS_COUNT_QUERY, data });
+
         return null;
       }
     }
