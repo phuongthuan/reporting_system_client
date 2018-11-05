@@ -8,7 +8,7 @@ import TextInput from '../TextInput';
 import TextArea from '../TextArea';
 import AsyncButton from '../AsyncButton';
 import Spinner from '../Spinner';
-import { CenterWrapper } from '../../styles/App';
+import { CenterWrapper, SpinnerWrapper } from '../../styles/App';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 import RadioButton from '../RadioButton';
 import RadioInput from '../RadioInput';
@@ -29,7 +29,15 @@ const DailyReportFormUpdate = ({ match }) => (
     }}
   >
     {({ data, loading }) => {
-      if (loading) return <Spinner />;
+
+      if (loading) {
+        return (
+          <SpinnerWrapper bgColor="#FFFFFF">
+            <Spinner />
+          </SpinnerWrapper>
+        )
+      }
+
       if (!data.dailyReport) return <div>Daily Report Not Found for ID {match.params.id}</div>;
 
       const { title, emotion, achievement, plan, comment } = data.dailyReport;
