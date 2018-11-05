@@ -5,7 +5,9 @@ import { Icon } from 'semantic-ui-react';
 import { IconBtn } from 'components/Shared/Reports/styles';
 import queryString from 'query-string';
 import { itemsAmount } from 'containers/DailyReportPage/constants';
+import isEmpty from 'lodash/isEmpty';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
+import getDailyReportsCacheVariables from '../../utils/getDailyReportsCacheVariables';
 
 export const DELETE_DAILY_REPORT_MUTATION = gql`
   mutation DELETE_DAILY_REPORT_MUTATION($id: ID!) {
@@ -14,6 +16,55 @@ export const DELETE_DAILY_REPORT_MUTATION = gql`
     }
   }
 `;
+
+function updateCacheLoop(store, variables, newVariables) {
+  const { skip, first, orderBy } = newVariables;
+
+  const newArg = getDailyReportsCacheVariables(first, skip);
+  const arg = getDailyReportsCacheVariables(first, skip - itemsAmount);
+
+  if (store.data.data.ROOT_QUERY[newArg]) {
+    const newData = store.readQuery({ query: DAILY_REPORTS_QUERY, variables: newVariables });
+    if (isEmpty(newData.userReports.dailyReports)) return;
+
+    const shifted = newData.userReports.dailyReports.shift(); //remove first report from next page
+    store.writeQuery({ query: DAILY_REPORTS_QUERY, data: newData, variables: newVariables });
+
+    if (store.data.data.ROOT_QUERY[arg]) {
+      const data = store.readQuery({ query: DAILY_REPORTS_QUERY, variables });
+      data.userReports.dailyReports.push(shifted); // add removed report to current page
+      store.writeQuery({ query: DAILY_REPORTS_QUERY, data, variables });
+    }
+
+    const nextVariables = {
+      skip: skip + itemsAmount,
+      first,
+      orderBy
+    };
+    // move to next loop
+    // this loop continues until (store.data.data.ROOT_QUERY[newArg]) becomes false
+    updateCacheLoop(store, newVariables, nextVariables);
+  }
+}
+
+function deleteReportLoopHandler(store, variables, deleteDailyReport) {
+  const { skip, first, orderBy } = variables;
+  const data = store.readQuery({ query: DAILY_REPORTS_QUERY, variables });
+  data.userReports.dailyReports = data.userReports.dailyReports.filter(
+    report => report.id !== deleteDailyReport.id
+  );
+  store.writeQuery({ query: DAILY_REPORTS_QUERY, data, variables });
+
+  const newVariables = {
+    skip: skip + itemsAmount,
+    first,
+    orderBy
+  };
+
+  // move to 2nd loop
+  updateCacheLoop(store, variables, newVariables);
+}
+
 class DeleteBtn extends Component {
   handleDelete(deleteDailyReport, report) {
     const { id } = report;
@@ -21,7 +72,7 @@ class DeleteBtn extends Component {
   }
 
   render() {
-    const { report, location } = this.props;
+    const { report, location, count, updateUserDailyReportsCount } = this.props;
     return (
       <Mutation
         mutation={DELETE_DAILY_REPORT_MUTATION}
@@ -31,14 +82,16 @@ class DeleteBtn extends Component {
 
           const variables = {
             skip,
-            first: itemsAmount
+            first: itemsAmount,
+            orderBy: 'createdAt_DESC'
           };
 
-          const data = store.readQuery({ query: DAILY_REPORTS_QUERY, variables });
-          data.userReports.dailyReports = data.userReports.dailyReports.filter(
-            report => report.id !== deleteDailyReport.id
-          );
-          store.writeQuery({ query: DAILY_REPORTS_QUERY, data, variables });
+          deleteReportLoopHandler(store, variables, deleteDailyReport); // call first update loop
+          updateUserDailyReportsCount({
+            variables: {
+              count: count - 1
+            }
+          });
         }}
         optimisticResponse={{
           __typename: 'Mutation',

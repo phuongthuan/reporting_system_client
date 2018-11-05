@@ -22,8 +22,8 @@ import { headerItems, itemsAmount } from './constants';
 import formatDate from '../../utils/formatDate';
 
 const DAILY_REPORTS_QUERY = gql`
-  query DAILY_REPORTS_QUERY($first: Int, $skip: Int) {
-    userReports(first: $first, skip: $skip) {
+  query DAILY_REPORTS_QUERY($first: Int, $skip: Int, $orderBy: DailyReportOrderByInput) {
+    userReports(first: $first, skip: $skip, orderBy: $orderBy) {
       count
       dailyReports {
         id
@@ -48,9 +48,19 @@ export const USER_DAILY_REPORTS_COUNT_QUERY = gql`
   }
 `;
 
+export const INITIALIZE_USER_DAILY_REPORTS_COUNT_MUTATION = gql`
+  mutation INITIALIZE_USER_DAILY_REPORTS_COUNT_MUTATION($count: String!) {
+    initializeUserDailyReportsCount(count: $count) @client {
+      count
+      isInitialized
+      __typename
+    }
+  }
+`;
+
 export const UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION = gql`
   mutation UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION($count: String!) {
-    updateUserDaiyReportsCount(count: $count) @client {
+    updateUserDailyReportsCount(count: $count) @client {
       count
       isInitialized
       __typename
@@ -59,36 +69,47 @@ export const UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION = gql`
 `;
 
 class DailyReportContainer extends Component {
-  nextPage = data => {
-    const currentPage = Number(queryString.parse(this.props.location.search).page) || 1;
-    const { count } = data.userReports;
+  isNextPageShowable = (currentPage, count) => currentPage <= (count - 1) / itemsAmount;
+
+  isPrevPageShowable = location =>
+    !isEmpty(queryString.parse(this.props.location.search).page) &&
+    Number(queryString.parse(location.search).page) !== 1;
+
+  nextPage = (currentPage, count) => {
     const nextPage = currentPage + 1;
-    if (currentPage <= count / itemsAmount) {
+    if (currentPage <= (count - 1) / itemsAmount) {
       history.push(`/reports?page=${nextPage}`);
     }
   };
 
-  prevPage = () => {
-    const currentPage = Number(queryString.parse(this.props.location.search).page) || 1;
+  prevPage = currentPage => {
     const prevPage = currentPage - 1;
     if (currentPage > 1) {
       history.push(`/reports?page=${prevPage}`);
     }
   };
 
-  getQueryVariables = () => {
-    const currentPage = queryString.parse(this.props.location.search).page;
-    const skip = currentPage ? (currentPage - 1) * itemsAmount : 0;
+  getQueryVariables = currentPage => {
+    const skip = (currentPage - 1) * itemsAmount;
     return {
       first: itemsAmount,
-      skip
+      skip,
+      orderBy: 'createdAt_DESC'
     };
   };
 
   render() {
-    const { match, location, updateUserDailyReportsCount } = this.props;
+    const {
+      match,
+      location,
+      initializeUserDailyReportsCount,
+      updateUserDailyReportsCount
+    } = this.props;
+    const { count } = this.props.userDailyReportsCount;
+    const currentPage = Number(queryString.parse(this.props.location.search).page) || 1;
+
     return (
-      <Query query={DAILY_REPORTS_QUERY} variables={this.getQueryVariables()}>
+      <Query query={DAILY_REPORTS_QUERY} variables={this.getQueryVariables(currentPage)}>
         {({ data, loading, error }) => {
           if (loading) {
             return (
@@ -108,8 +129,8 @@ class DailyReportContainer extends Component {
             );
           }
 
-          // ser current dailyReports count via apollo-link-state
-          updateUserDailyReportsCount({
+          // set current dailyReports count via apollo-link-state
+          initializeUserDailyReportsCount({
             variables: {
               count: parseInt(data.userReports.count)
             }
@@ -148,13 +169,24 @@ class DailyReportContainer extends Component {
                         />
                       </IconBtn>
 
-                      <DeleteBtn report={report} location={location} />
+                      <DeleteBtn
+                        report={report}
+                        location={location}
+                        count={count}
+                        updateUserDailyReportsCount={updateUserDailyReportsCount}
+                      />
                     </ReportsRowColumn>
                   </ReportsRow>
                 ))}
               </ReportsTable>
-              <button onClick={() => this.prevPage()}>◀︎Prev</button>{' '}
-              <button onClick={() => this.nextPage(data)}>Next▶</button>
+              {this.isPrevPageShowable(location) && (
+                <span>
+                  <button onClick={() => this.prevPage(currentPage)}>◀︎Prev</button>{' '}
+                </span>
+              )}
+              {this.isNextPageShowable(currentPage, count) && (
+                <button onClick={() => this.nextPage(currentPage, count)}>Next▶</button>
+              )}
             </ContentWrapper>
           );
         }}
@@ -168,6 +200,9 @@ export default compose(
     props: ({ data: { userDailyReportsCount } }) => ({
       userDailyReportsCount
     })
+  }),
+  graphql(INITIALIZE_USER_DAILY_REPORTS_COUNT_MUTATION, {
+    name: 'initializeUserDailyReportsCount'
   }),
   graphql(UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION, { name: 'updateUserDailyReportsCount' })
 )(DailyReportContainer);

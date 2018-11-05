@@ -4,7 +4,6 @@ import { Input } from 'semantic-ui-react';
 const SearchInput = styled(Input)`
   border-radius: 5px;
   font-size: 1rem;
-  margin-top: 40px;
   width: 33%;
 
   @media (max-width: 768px) {
