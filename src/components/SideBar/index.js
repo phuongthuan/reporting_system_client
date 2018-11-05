@@ -7,24 +7,35 @@ import Spinner from '../Spinner';
 
 const SideBar = () => (
   <User>
-    {({ data, loading, error }) => (
-      <Fragment>
-        {loading && <Spinner />}
-        {error && <div>Error: {error.message}</div>}
+    {({ data, loading, error }) => {
+      const { avatar, roles } = data.me;
+      return (
+        <Fragment>
+          {loading && <Spinner />}
+          {error && <div>Error: {error.message}</div>}
 
-        <SideBarWrapper>
-          <ul>
-            <li>
-              <img src={data.me.avatar} alt="avatar profile"/>
-              <Link to="/profile/edit">Edit Profile</Link>
-            </li>
-            <li><Link to="/reports/new">Create Daily Report</Link></li>
-            <li><Link to="/reports">Daily Reports</Link></li>
-            <li><SignOut/></li>
-          </ul>
-        </SideBarWrapper>
-      </Fragment>
-    )}
+          <SideBarWrapper>
+            <ul>
+              <li>
+                <img src={avatar} alt="avatar profile"/>
+                <Link to="/profile/edit">Edit Profile</Link>
+              </li>
+              <li><Link to="/reports/new">Create Daily Report</Link></li>
+
+              {roles.includes('TEAM_LEADER') && (
+                <Fragment>
+                  <li><Link to="/weekly-reports/new">Create Weekly Report</Link></li>
+                  <li><Link to="/statistic">Statistic</Link></li>
+                </Fragment>
+              )}
+
+              <li><Link to="/reports">Daily Reports</Link></li>
+              <li><SignOut/></li>
+            </ul>
+          </SideBarWrapper>
+        </Fragment>
+      )
+    }}
   </User>
 );
 
