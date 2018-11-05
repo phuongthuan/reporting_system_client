@@ -19,6 +19,7 @@ import {
 
 import RadioButton from '../RadioButton';
 import getDailyReportsCacheVariables from '../../utils/getDailyReportsCacheVariables';
+import ErrorMessage from '../ErrorMessage';
 
 const DailyReportSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -75,126 +76,134 @@ const DailyReportForm = props => (
       });
     }}
   >
-    {(createDailyReport, { loading, error }) => (
-      <CenterWrapper>
-        {error && <div>error</div>}
-        <Formik
-          initialValues={{
-            title: '',
-            emotion: '',
-            achievement: '',
-            plan: '',
-            comment: ''
-          }}
-          enableReinitialize
-          validationSchema={DailyReportSchema}
-          onSubmit={async (values, { setSubmitting, setStatus, setErrors, resetForm }) => {
-            const { title, emotion, achievement, plan, comment } = values;
+    {(createDailyReport, { loading, error }) => {
 
-            try {
-              await createDailyReport({
-                variables: {
-                  title,
-                  emotion,
-                  achievement,
-                  plan,
-                  comment
-                }
-              });
-              resetForm({});
-              setStatus({ success: true });
-            } catch (error) {
-              setStatus({ success: false });
-              setSubmitting(false);
-              setErrors({ submit: error.message });
-            }
-          }}
-          render={({ values, handleSubmit, handleChange, touched, errors, status }) => (
-            <Form
-              onSubmit={handleSubmit}
-              loading={loading}
-              success={status ? status.success : false}
-            >
-              <TextInput
-                type="text"
-                label="Title"
-                name="title"
-                value={values.title || ''}
-                error={touched.title && errors.title}
-                onChange={handleChange}
-              />
+      if (error) return <ErrorMessage error={error} />;
 
-              <RadioInput
-                id="emotion"
-                label="Emotion"
-                name="emotion"
-                values={values.emotion}
-                error={errors.emotion}
-                touched={touched.emotion}
+      return (
+        <CenterWrapper>
+          <Formik
+            initialValues={{
+              title: '',
+              emotion: '',
+              achievement: '',
+              plan: '',
+              comment: ''
+            }}
+            enableReinitialize
+            validationSchema={DailyReportSchema}
+            onSubmit={async (values, { setSubmitting, setStatus, setErrors, resetForm }) => {
+              const { title, emotion, achievement, plan, comment } = values;
+
+              try {
+                await createDailyReport({
+                  variables: {
+                    title,
+                    emotion,
+                    achievement,
+                    plan,
+                    comment
+                  }
+                });
+                resetForm({});
+                setStatus({ success: true });
+              } catch (error) {
+                setStatus({ success: false });
+                setSubmitting(false);
+                setErrors({ submit: error.message });
+              }
+            }}
+            render={({ values, handleSubmit, handleChange, touched, errors, status }) => (
+              <Form
+                onSubmit={handleSubmit}
+                loading={loading}
+                success={status ? status.success : false}
               >
-                <Field
-                  defaultChecked
-                  id=":grinning:"
-                  name="emotion"
-                  component={RadioButton}
-                  label=":grinning:"
+                <TextInput
+                  type="text"
+                  label="Title"
+                  name="title"
+                  value={values.title || ''}
+                  error={touched.title && errors.title}
+                  onChange={handleChange}
                 />
 
-                <Field
-                  id=":neutral_face:"
+                <RadioInput
+                  id="emotion"
+                  label="Emotion"
                   name="emotion"
-                  component={RadioButton}
-                  label=":neutral_face:"
+                  values={values.emotion}
+                  error={errors.emotion}
+                  touched={touched.emotion}
+                >
+                  <Field
+                    defaultChecked
+                    id=":grinning:"
+                    name="emotion"
+                    component={RadioButton}
+                    label=":grinning:"
+                  />
+
+                  <Field
+                    id=":neutral_face:"
+                    name="emotion"
+                    component={RadioButton}
+                    label=":neutral_face:"
+                  />
+
+                  <Field
+                    id=":disappointed_relieved:"
+                    name="emotion"
+                    component={RadioButton}
+                    label=":disappointed_relieved:"
+                  />
+                </RadioInput>
+
+                <TextArea
+                  type="textarea"
+                  label="Today Achievement"
+                  name="achievement"
+                  value={values.achievement || ''}
+                  error={touched.achievement && errors.achievement}
+                  onChange={handleChange}
                 />
 
-                <Field
-                  id=":disappointed_relieved:"
-                  name="emotion"
-                  component={RadioButton}
-                  label=":disappointed_relieved:"
+                <TextArea
+                  type="textarea"
+                  label="Plan for next day"
+                  name="plan"
+                  value={values.plan || ''}
+                  error={touched.plan && errors.plan}
+                  onChange={handleChange}
                 />
-              </RadioInput>
 
-              <TextArea
-                type="textarea"
-                label="Today Achievement"
-                name="achievement"
-                value={values.achievement || ''}
-                error={touched.achievement && errors.achievement}
-                onChange={handleChange}
-              />
+                <TextArea
+                  type="textarea"
+                  label="Comment"
+                  name="comment"
+                  value={values.comment || ''}
+                  error={touched.comment && errors.comment}
+                  onChange={handleChange}
+                />
 
-              <TextArea
-                type="textarea"
-                label="Plan for next day"
-                name="plan"
-                value={values.plan || ''}
-                error={touched.plan && errors.plan}
-                onChange={handleChange}
-              />
+                <Message
+                  success
+                  header='Create Successfully!'
+                  content="Your report has been created."
+                />
 
-              <TextArea
-                type="textarea"
-                label="Comment"
-                name="comment"
-                value={values.comment || ''}
-                error={touched.comment && errors.comment}
-                onChange={handleChange}
-              />
-
-              <Message
-                success
-                header="Create Successfully!"
-                content="Your report has been created."
-              />
-
-              <AsyncButton buttonName="Create" type="submit" loading={loading} />
-              <Persist name="create-daily-report-form" debounce="1000" />
-            </Form>
-          )}
-        />
-      </CenterWrapper>
-    )}
+                <AsyncButton
+                  buttonName="Create"
+                  type="submit"
+                  loading={loading}
+                />
+                <Persist name="create-daily-report-form" debounce="1000"/>
+              </Form>
+            )}
+          />
+        </CenterWrapper>
+      )
+    }}
   </Mutation>
 );
 
