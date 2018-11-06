@@ -11,12 +11,11 @@ import { getMainDefinition } from 'apollo-utilities';
 import { withClientState } from 'apollo-link-state';
 import { USER_DAILY_REPORTS_COUNT_QUERY } from 'containers/DailyReportPage/DailyReportContainer';
 
-import App from 'containers/App';
+import App from './containers/App';
 import history from './utils/history';
 
 import 'semantic-ui-css/semantic.min.css';
 import './ress.min.css';
-// import './common.style';
 
 const httpUri =
   process.env.NODE_ENV === 'production'
@@ -30,7 +29,7 @@ const httpLink = new HttpLink({
 
 const wsUri =
   process.env.NODE_ENV === 'production'
-    ? 'Set uri for production here'
+    ? 'wss://rs-yoga-prod.herokuapp.com/'
     : process.env.REACT_APP_WS_URI;
 
 const wsLink = new WebSocketLink({

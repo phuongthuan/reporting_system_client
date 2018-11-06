@@ -75,6 +75,7 @@
     "sass-loader": "7.1.0",
     "semantic-ui-css": "^2.4.0",
     "semantic-ui-react": "^0.82.5",
+    "serve": "^10.0.2",
     "style-loader": "0.23.0",
     "subscriptions-transport-ws": "^0.9.15",
     "terser-webpack-plugin": "1.1.0",
@@ -87,11 +88,13 @@
     "yup": "^0.26.6"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development node scripts/start.js ",
+    "dev": "cross-env NODE_ENV=development node scripts/start.js ",
+    "start": "serve -s build",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "eslint": "cross-env NODE_ENV=development eslint src",
-    "eslint:fix": "eslint src --fix"
+    "eslint:fix": "eslint src --fix",
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -102,7 +105,10 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:4000",
+  "proxy": {
+    "dev": { "target": "http://localhost:4000/" },
+    "prod": { "target": "https://rs-yoga-prod.herokuapp.com/" }
+  },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
