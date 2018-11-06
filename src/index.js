@@ -10,17 +10,15 @@ import { split, ApolloLink } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { withClientState } from 'apollo-link-state';
 import { USER_DAILY_REPORTS_COUNT_QUERY } from 'containers/DailyReportPage/DailyReportContainer';
-
-import App from 'containers/App';
+import App from './containers/App';
 import history from './utils/history';
-
 import 'semantic-ui-css/semantic.min.css';
 import './ress.min.css';
-// import './common.style';
+import { SERVER_PROD_URL, WS_PROD_URL } from './config';
 
 const httpUri =
   process.env.NODE_ENV === 'production'
-    ? 'Set uri for production here'
+    ? SERVER_PROD_URL
     : process.env.REACT_APP_GRAPHQL_URI;
 
 const httpLink = new HttpLink({
@@ -30,7 +28,7 @@ const httpLink = new HttpLink({
 
 const wsUri =
   process.env.NODE_ENV === 'production'
-    ? 'Set uri for production here'
+    ? WS_PROD_URL
     : process.env.REACT_APP_WS_URI;
 
 const wsLink = new WebSocketLink({
