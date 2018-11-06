@@ -20,7 +20,7 @@ import './ress.min.css';
 
 const httpUri =
   process.env.NODE_ENV === 'production'
-    ? 'Set uri for production here'
+    ? 'https://rs-yoga-prod.herokuapp.com/'
     : process.env.REACT_APP_GRAPHQL_URI;
 
 const httpLink = new HttpLink({
