@@ -11,13 +11,12 @@ import AsyncButton from '../AsyncButton';
 const ProfileFormUpdate = () => (
   <Query query={GET_PROFILE_QUERY}>
     {({ data, loading, error }) => {
-
       if (loading) {
         return (
           <SpinnerWrapper bgColor="#FFFFFF">
             <Spinner />
           </SpinnerWrapper>
-        )
+        );
       }
 
       if (error) return <div>Error: {error.message}</div>;
@@ -25,9 +24,7 @@ const ProfileFormUpdate = () => (
       const { id, name, avatar, email, address, phone, team } = data.me;
 
       return (
-        <Mutation
-          mutation={EDIT_PROFILE_MUTATION}
-        >
+        <Mutation mutation={EDIT_PROFILE_MUTATION}>
           {(editProfile, { loading, error }) => (
             <CenterWrapper>
               {error && <div>error</div>}
@@ -67,7 +64,6 @@ const ProfileFormUpdate = () => (
                     loading={loading}
                     success={status ? status.success : false}
                   >
-
                     <TextInput
                       disabled
                       type="text"
@@ -132,13 +128,13 @@ const ProfileFormUpdate = () => (
             </CenterWrapper>
           )}
         </Mutation>
-      )
+      );
     }}
   </Query>
 );
 
 const GET_PROFILE_QUERY = gql`
-  query {
+  query GET_PROFILE_QUERY {
     me {
       id
       name
@@ -148,6 +144,7 @@ const GET_PROFILE_QUERY = gql`
       phone
       roles
       team {
+        id
         name
       }
     }
@@ -155,18 +152,8 @@ const GET_PROFILE_QUERY = gql`
 `;
 
 const EDIT_PROFILE_MUTATION = gql`
-  mutation EDIT_PROFILE_MUTATION(
-    $id: ID!
-    $address: String
-    $phone: String
-    $avatar: String
-  ) {
-    editProfile(
-      id: $id
-      address: $address
-      phone: $phone
-      avatar: $avatar
-    ) {
+  mutation EDIT_PROFILE_MUTATION($id: ID!, $address: String, $phone: String, $avatar: String) {
+    editProfile(id: $id, address: $address, phone: $phone, avatar: $avatar) {
       id
       address
       phone
