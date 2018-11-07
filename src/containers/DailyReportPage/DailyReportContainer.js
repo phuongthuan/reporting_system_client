@@ -175,6 +175,7 @@ class DailyReportContainer extends Component {
                         count={count}
                         updateUserDailyReportsCount={updateUserDailyReportsCount}
                       />
+
                     </ReportsRowColumn>
                   </ReportsRow>
                 ))}
@@ -187,6 +188,7 @@ class DailyReportContainer extends Component {
               {this.isNextPageShowable(currentPage, count) && (
                 <button onClick={() => this.nextPage(currentPage, count)}>Next▶</button>
               )}
+
             </ContentWrapper>
           );
         }}

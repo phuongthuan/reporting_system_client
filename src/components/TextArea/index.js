@@ -21,6 +21,7 @@ const TextArea = ({
     {isEmpty(error) ? (
       <FormFieldStyles>
         <TextAreaStyles
+          autoHeight
           label={label}
           id={id}
           rows="5"
@@ -34,6 +35,7 @@ const TextArea = ({
     ) : (
       <FormFieldStyles>
         <TextAreaStyles
+          autoHeight
           error={!!error}
           label={label}
           id={id}
