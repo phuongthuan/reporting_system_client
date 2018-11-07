@@ -38,16 +38,20 @@ module.exports = {
     'jsx-tag-spacing': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'jsx-a11y/heading-has-content': 0,
-    'jsx-a11y/label-has-for': [2, {
-      "required": {
-        "some": [ "nesting", "id" ]
+    'jsx-a11y/label-has-for': [
+      2,
+      {
+        required: {
+          some: ['nesting', 'id']
+        }
       }
-    }],
+    ],
     'react/jsx-filename-extension': 0,
     'react/require-extension': 0,
     'react/destructuring-assignment': 0,
     'react/require-default-props': 0,
     'react/no-unused-state': 0,
+    'react/no-unescaped-entities': 0,
     'react/require-render-return': 0,
     'react/jsx-tag-spacing': 0,
     'react/jsx-indent': 0,

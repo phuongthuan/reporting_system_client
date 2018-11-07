@@ -8,19 +8,25 @@ import RouteSpinner from '../../components/RouteSpinner';
 /**
  * @return {null}
  */
-function Loading(props) {
+function loading(props) {
   if (props.error) {
-    return <div>Error! <button onClick={props.retry}>Retry</button></div>;
+    return (
+      <div>
+        Error! <button onClick={props.retry}>Retry</button>
+      </div>
+    );
   } else if (props.timedOut) {
-    return <div>Taking a long time... <button onClick={props.retry}>Retry</button></div>;
+    return (
+      <div>
+        Taking a long time... <button onClick={props.retry}>Retry</button>
+      </div>
+    );
   } else if (props.pastDelay) {
     return <RouteSpinner />;
   } else {
     return null;
   }
 }
-
-const loading = () => <div>Loadable Loading...</div>;
 
 const HomePage = Loadable({
   loader: () => import('containers/HomePage'),
@@ -37,22 +43,27 @@ const MemberPage = Loadable({
   loading
 });
 
+const TeamPage = Loadable({
+  loader: () => import('containers/TeamPage'),
+  loading
+});
+
 const DailyReportPage = Loadable({
   loader: () => import('containers/DailyReportPage'),
-  loading: Loading,
-  delay: 300,
+  loading,
+  delay: 300
 });
 
 const WeeklyReportPage = Loadable({
   loader: () => import('containers/WeeklyReportPage'),
-  loading: Loading,
-  delay: 300,
+  loading,
+  delay: 300
 });
 
 const ProfilePage = Loadable({
   loader: () => import('containers/ProfilePage'),
-  loading: Loading,
-  delay: 300,
+  loading,
+  delay: 300
 });
 
 const AdminPage = Loadable({
@@ -63,13 +74,14 @@ const AdminPage = Loadable({
 const App = () => (
   <div className="App">
     <Switch>
-      <Route location={location} path="/auth" component={AuthPage}/>
-      <PrivateRoute location={location} exact path="/" component={HomePage}/>
-      <PrivateRoute location={location} path="/members" component={MemberPage}/>
-      <PrivateRoute location={location} path="/reports" component={DailyReportPage}/>
-      <PrivateRoute location={location} path="/weekly-reports" component={WeeklyReportPage}/>
-      <PrivateRoute location={location} path="/profile" component={ProfilePage}/>
-      <PrivateRoute location={location} path="/admin" component={AdminPage}/>
+      <Route location={location} path="/auth" component={AuthPage} />
+      <PrivateRoute location={location} exact path="/" component={HomePage} />
+      <PrivateRoute location={location} path="/members" component={MemberPage} />
+      <PrivateRoute location={location} path="/reports" component={DailyReportPage} />
+      <PrivateRoute location={location} path="/weekly-reports" component={WeeklyReportPage} />
+      <PrivateRoute location={location} path="/teams" component={TeamPage} />
+      <PrivateRoute location={location} path="/profile" component={ProfilePage} />
+      <PrivateRoute location={location} path="/admin" component={AdminPage} />
       <Route component={NoMatch} />
     </Switch>
   </div>
