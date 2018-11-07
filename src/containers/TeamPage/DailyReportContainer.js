@@ -19,6 +19,7 @@ import { TeamReportsHeader, TeamReportsRow } from '../../styles/TeamDailyReports
 import { ContentWrapper, SpinnerWrapper } from '../../styles/App';
 import formatDate from '../../utils/formatDate';
 import history from '../../utils/history';
+import ErrorMessage from '../../components/ErrorMessage';
 
 class DailyReportContainer extends Component {
   isNextPageShowable = (currentPage, count) => currentPage <= (count - 1) / itemsAmount;
@@ -67,6 +68,7 @@ class DailyReportContainer extends Component {
         variables={this.getQueryVariables(currentPage, teamId)}
       >
         {({ data, error, loading }) => {
+
           if (loading) {
             return (
               <SpinnerWrapper bgColor="#FFFFFF">
@@ -74,7 +76,9 @@ class DailyReportContainer extends Component {
               </SpinnerWrapper>
             );
           }
-          if (error) return <p>error: {error.message}</p>;
+
+          if (error) return <ErrorMessage error={error} />;
+
           const { count } = data.dailyReports;
 
           return (
@@ -95,7 +99,7 @@ class DailyReportContainer extends Component {
                     <ReportsRowColumn>
                       <Emoji emoji={report.emotion} size={24} />
                     </ReportsRowColumn>
-                    <ReportsRowColumn>
+                    <ReportsRowColumn onClick={() => history.push(`/reports/${report.id}`)}>
                       <a>{report.title}</a>
                     </ReportsRowColumn>
                     <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
