@@ -11,13 +11,16 @@ const CURRENT_USER_QUERY = gql`
       email
       avatar
       roles
+      team {
+        id
+      }
     }
   }
 `;
 
 class User extends React.Component {
   static propTypes = {
-    children: PropTypes.func.isRequired,
+    children: PropTypes.func.isRequired
   };
 
   render() {
