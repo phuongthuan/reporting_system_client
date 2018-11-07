@@ -1,21 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Icon } from 'semantic-ui-react';
+import { Button, Icon, Modal } from 'semantic-ui-react';
 import { IconBtn } from 'components/Shared/Reports/styles';
 import queryString from 'query-string';
 import { itemsAmount } from 'containers/DailyReportPage/constants';
 import isEmpty from 'lodash/isEmpty';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 import getDailyReportsCacheVariables from '../../utils/getDailyReportsCacheVariables';
-
-export const DELETE_DAILY_REPORT_MUTATION = gql`
-  mutation DELETE_DAILY_REPORT_MUTATION($id: ID!) {
-    deleteDailyReport(id: $id) {
-      id
-    }
-  }
-`;
+import ErrorMessage from '../ErrorMessage';
 
 function updateCacheLoop(store, variables, newVariables) {
   const { skip, first, orderBy } = newVariables;
@@ -66,13 +59,31 @@ function deleteReportLoopHandler(store, variables, deleteDailyReport) {
 }
 
 class DeleteBtn extends Component {
-  handleDelete(deleteDailyReport, report) {
+
+  state = { open: false };
+
+  closeConfigShow = (closeOnEscape, closeOnDimmerClick) => () => {
+    this.setState({ closeOnEscape, closeOnDimmerClick, open: true });
+  };
+
+  handleDelete = (deleteDailyReport, report) => {
     const { id } = report;
     deleteDailyReport({ variables: { id } });
-  }
+  };
+
+  no = () => {
+    this.setState({ open: false });
+  };
+
+  yes = (deleteDailyReport, report) => {
+    this.setState({ open: false });
+    this.handleDelete(deleteDailyReport, report);
+  };
 
   render() {
     const { report, location, count, updateUserDailyReportsCount } = this.props;
+    const { open, closeOnEscape, closeOnDimmerClick } = this.state;
+
     return (
       <Mutation
         mutation={DELETE_DAILY_REPORT_MUTATION}
@@ -102,29 +113,60 @@ class DeleteBtn extends Component {
         }}
       >
         {(deleteDailyReport, { error }) => {
-          {
-            error && <p>Error: {error.message}</p>;
-          }
+
+          if (error) return <ErrorMessage error={error} />;
 
           return (
-            <IconBtn>
-              <Icon
-                bordered
-                inverted
-                color="red"
-                name="trash alternate"
-                onClick={() => {
-                  if (confirm('Are you sure you want to delete this daily report?')) {
-                    this.handleDelete(deleteDailyReport, report);
-                  }
-                }}
-              />
-            </IconBtn>
+            <Fragment>
+              <IconBtn>
+                <Icon
+                  bordered
+                  inverted
+                  color="red"
+                  name="trash alternate"
+                  onClick={this.closeConfigShow(false, true)}
+                />
+              </IconBtn>
+
+              <Modal
+                size="mini"
+                open={open}
+                closeOnEscape={closeOnEscape}
+                closeOnDimmerClick={closeOnDimmerClick}
+                onClose={this.no}
+              >
+                <Modal.Header as='h4'>Confirm Delete</Modal.Header>
+                <Modal.Content>
+                  <p>Are you sure you want to delete?</p>
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button size="mini" onClick={this.no} negative>
+                    No
+                  </Button>
+                  <Button
+                    size="mini"
+                    onClick={() => this.yes(deleteDailyReport, report)}
+                    positive
+                    labelPosition='right'
+                    icon='checkmark'
+                    content='Yes'
+                  />
+                </Modal.Actions>
+              </Modal>
+            </Fragment>
           );
         }}
       </Mutation>
     );
   }
 }
+
+export const DELETE_DAILY_REPORT_MUTATION = gql`
+  mutation DELETE_DAILY_REPORT_MUTATION($id: ID!) {
+    deleteDailyReport(id: $id) {
+      id
+    }
+  }
+`;
 
 export default DeleteBtn;

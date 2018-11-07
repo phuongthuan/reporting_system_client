@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
-import { Divider, Header, Segment } from 'semantic-ui-react';
+import { Header, Segment } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { Emoji } from 'emoji-mart';
 import { ContentWrapper, SpinnerWrapper } from '../../styles/App';
 import Spinner from '../../components/Spinner';
+import TextArea from '../../components/TextArea';
 
 const DailyReportDetailContainer = ({ match }) => (
   <Query
@@ -29,10 +30,10 @@ const DailyReportDetailContainer = ({ match }) => (
 
       return (
         <ContentWrapper>
-          <Header>
+
+          <Header as='h3' dividing>
             Report Detail
           </Header>
-          <Divider/>
 
           <Segment padded='very'>
 
@@ -54,19 +55,37 @@ const DailyReportDetailContainer = ({ match }) => (
             <Header as='h5' dividing>
               Today Achievement
             </Header>
-            <p>{achievement}</p>
+            <div>
+              <TextArea
+                style={{ width: '100%'}}
+                readOnly
+                value={achievement}
+              />
+            </div>
 
             <Header as='h5' dividing>
               Plan for next day
             </Header>
-            <p>{plan}</p>
+            <div>
+              <TextArea
+                style={{ width: '100%'}}
+                readOnly
+                value={plan}
+              />
+            </div>
 
             {comment !== '' && (
               <Fragment>
                 <Header as='h5' dividing>
                   Comment
                 </Header>
-                <p>{comment}</p>
+                <div>
+                  <TextArea
+                    style={{ width: '100%'}}
+                    readOnly
+                    value={comment}
+                  />
+                </div>
               </Fragment>
             )}
 
