@@ -4,15 +4,7 @@ import { Emoji } from 'emoji-mart';
 import queryString from 'query-string';
 import { Divider, Header, Icon } from 'semantic-ui-react';
 import DeleteBtn from 'components/DeleteBtn';
-import {
-  IconBtn,
-  ReportsHeader,
-  ReportsHeaderColumn,
-  ReportsRow,
-  ReportsRowColumn,
-  ReportsTable,
-  SearchInput
-} from 'components/Shared/Reports/styles';
+import { IconBtn, ReportsHeader, ReportsRow, SearchInput } from 'components/Shared/Reports/styles';
 import Spinner from 'components/Spinner';
 import gql from 'graphql-tag';
 import { compose, graphql, Query } from 'react-apollo';
@@ -20,6 +12,8 @@ import history from '../../utils/history';
 import { ContentWrapper, SpinnerWrapper } from '../../styles/App';
 import { headerItems, itemsAmount } from './constants';
 import formatDate from '../../utils/formatDate';
+
+import { ContentsTable, ContentsHeaderColumn, ContentsRowColumn } from '../../styles/ContentsTable';
 
 const DAILY_REPORTS_QUERY = gql`
   query DAILY_REPORTS_QUERY($first: Int, $skip: Int, $orderBy: DailyReportOrderByInput) {
@@ -141,26 +135,26 @@ class DailyReportContainer extends Component {
               <Header>Your Daily Reports</Header>
               <Divider />
               <SearchInput icon="search" iconPosition="left" placeholder="Type Something ..." />
-              <ReportsTable>
+              <ContentsTable>
                 <ReportsHeader>
                   {headerItems.map(item => (
-                    <ReportsHeaderColumn key={item}>{item}</ReportsHeaderColumn>
+                    <ContentsHeaderColumn key={item}>{item}</ContentsHeaderColumn>
                   ))}
                 </ReportsHeader>
 
                 {data.userReports.dailyReports.map((report, i) => (
                   <ReportsRow key={report.id}>
-                    <ReportsRowColumn>{i + 1}</ReportsRowColumn>
-                    <ReportsRowColumn>
+                    <ContentsRowColumn>{i + 1}</ContentsRowColumn>
+                    <ContentsRowColumn>
                       <Emoji emoji={report.emotion} size={24} />
-                    </ReportsRowColumn>
-                    <ReportsRowColumn onClick={() => history.push(`${match.path}/${report.id}`)}>
+                    </ContentsRowColumn>
+                    <ContentsRowColumn onClick={() => history.push(`${match.path}/${report.id}`)}>
                       <a>{report.title}</a>
-                    </ReportsRowColumn>
-                    <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
-                    <ReportsRowColumn>{report.plan}</ReportsRowColumn>
-                    <ReportsRowColumn>{formatDate(report.createdAt)}</ReportsRowColumn>
-                    <ReportsRowColumn>
+                    </ContentsRowColumn>
+                    <ContentsRowColumn>{report.achievement}</ContentsRowColumn>
+                    <ContentsRowColumn>{report.plan}</ContentsRowColumn>
+                    <ContentsRowColumn>{formatDate(report.createdAt)}</ContentsRowColumn>
+                    <ContentsRowColumn>
                       <IconBtn>
                         <Icon
                           name="edit"
@@ -175,11 +169,10 @@ class DailyReportContainer extends Component {
                         count={count}
                         updateUserDailyReportsCount={updateUserDailyReportsCount}
                       />
-
-                    </ReportsRowColumn>
+                    </ContentsRowColumn>
                   </ReportsRow>
                 ))}
-              </ReportsTable>
+              </ContentsTable>
               {this.isPrevPageShowable(location) && (
                 <span>
                   <button onClick={() => this.prevPage(currentPage)}>◀︎Prev</button>{' '}
@@ -188,7 +181,6 @@ class DailyReportContainer extends Component {
               {this.isNextPageShowable(currentPage, count) && (
                 <button onClick={() => this.nextPage(currentPage, count)}>Next▶</button>
               )}
-
             </ContentWrapper>
           );
         }}
