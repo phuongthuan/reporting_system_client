@@ -4,6 +4,7 @@ import SideBar from 'components/SideBar';
 import NoMatch from '../../utils/NoMatch';
 import { MainWrapper, RightContent, LeftContent } from '../../styles/App';
 import DailyReportContainer from './DailyReportContainer';
+import MemberListContainer from './MemberListContainer';
 
 class TeamPage extends Component {
   render() {
@@ -19,6 +20,10 @@ class TeamPage extends Component {
             <Route
               path={`${match.path}/:id/reports`}
               render={props => <DailyReportContainer userData={userData} {...props} />}
+            />
+            <Route
+              path={`${match.path}/:id/members`}
+              render={props => <MemberListContainer userData={userData} {...props} />}
             />
             <Route component={NoMatch} />
           </Switch>

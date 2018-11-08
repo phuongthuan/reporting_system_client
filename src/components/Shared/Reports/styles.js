@@ -11,24 +11,12 @@ const SearchInput = styled(Input)`
   }
 `;
 
-const ReportsTable = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  border: 1px solid #a6aaad;
-`;
-
 const ReportsHeader = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1fr 4fr 4fr 4fr 1.5fr 1.5fr;
   background-color: #e5e5e5;
   padding: 1rem 1.5rem;
   height: 60px;
-`;
-
-const ReportsHeaderColumn = styled.div`
-  margin-right: 0.2rem;
-  font-size: 1rem;
-  font-weight: bold;
 `;
 
 const ReportsRow = styled.div`
@@ -47,42 +35,6 @@ const ReportsRow = styled.div`
   }
 `;
 
-const ReportsRowColumn = styled.div`
-  margin-right: 0.5rem;
-  font-size: 1rem;
-
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  /* white-space: pre; */
-  /* -ms-text-overflow: ellipsis; */
-  /* text-overflow: ellipsis; */
-
-  a {
-    cursor: pointer;
-  }
-`;
-
-const IssueTag = styled.button`
-  font-size: 0.5rem;
-  background-color: #cbefff;
-  color: #0facf3;
-  border-radius: 5px;
-  margin: 0.08rem;
-  padding: 0.08rem;
-  font-weight: bold;
-
-  &:last-child {
-    margin: none;
-  }
-
-  @media (max-width: 1024px) {
-    padding: 0;
-    font-size: 0.2rem;
-  }
-`;
-
 const IconBtn = styled.div`
   font-size: 0.6rem;
   padding: 0.2rem;
@@ -96,13 +48,4 @@ const IconBtn = styled.div`
   }
 `;
 
-export {
-  SearchInput,
-  ReportsTable,
-  ReportsHeader,
-  ReportsHeaderColumn,
-  ReportsRow,
-  ReportsRowColumn,
-  IssueTag,
-  IconBtn
-};
+export { SearchInput, ReportsHeader, ReportsRow, IconBtn };

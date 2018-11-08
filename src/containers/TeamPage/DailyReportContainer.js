@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import isEmpty from 'lodash/isEmpty';
-import {
-  ReportsHeaderColumn,
-  ReportsRowColumn,
-  ReportsTable,
-  SearchInput
-} from 'components/Shared/Reports/styles';
+import { SearchInput } from 'components/Shared/Reports/styles';
 import { Emoji } from 'emoji-mart';
 import { Divider, Header } from 'semantic-ui-react';
 import Spinner from 'components/Spinner';
@@ -20,6 +15,8 @@ import { ContentWrapper, SpinnerWrapper } from '../../styles/App';
 import formatDate from '../../utils/formatDate';
 import history from '../../utils/history';
 import ErrorMessage from '../../components/ErrorMessage';
+
+import { ContentsTable, ContentsHeaderColumn, ContentsRowColumn } from '../../styles/ContentsTable';
 
 class DailyReportContainer extends Component {
   isNextPageShowable = (currentPage, count) => currentPage <= (count - 1) / itemsAmount;
@@ -68,7 +65,6 @@ class DailyReportContainer extends Component {
         variables={this.getQueryVariables(currentPage, teamId)}
       >
         {({ data, error, loading }) => {
-
           if (loading) {
             return (
               <SpinnerWrapper bgColor="#FFFFFF">
@@ -86,29 +82,29 @@ class DailyReportContainer extends Component {
               <Header>Team's Daily Reports</Header>
               <Divider />
               <SearchInput icon="search" iconPosition="left" placeholder="Type Something ..." />
-              <ReportsTable>
+              <ContentsTable>
                 <TeamReportsHeader>
                   {headerItems.map(item => (
-                    <ReportsHeaderColumn key={item}>{item}</ReportsHeaderColumn>
+                    <ContentsHeaderColumn key={item}>{item}</ContentsHeaderColumn>
                   ))}
                 </TeamReportsHeader>
 
                 {data.dailyReports.dailyReports.map((report, i) => (
                   <TeamReportsRow key={report.id}>
-                    <ReportsRowColumn>{i + 1}</ReportsRowColumn>
-                    <ReportsRowColumn>
+                    <ContentsRowColumn>{i + 1}</ContentsRowColumn>
+                    <ContentsRowColumn>
                       <Emoji emoji={report.emotion} size={24} />
-                    </ReportsRowColumn>
-                    <ReportsRowColumn onClick={() => history.push(`/reports/${report.id}`)}>
+                    </ContentsRowColumn>
+                    <ContentsRowColumn onClick={() => history.push(`/reports/${report.id}`)}>
                       <a>{report.title}</a>
-                    </ReportsRowColumn>
-                    <ReportsRowColumn>{report.achievement}</ReportsRowColumn>
-                    <ReportsRowColumn>{report.plan}</ReportsRowColumn>
-                    <ReportsRowColumn>{report.author.name}</ReportsRowColumn>
-                    <ReportsRowColumn>{formatDate(report.createdAt)}</ReportsRowColumn>
+                    </ContentsRowColumn>
+                    <ContentsRowColumn>{report.achievement}</ContentsRowColumn>
+                    <ContentsRowColumn>{report.plan}</ContentsRowColumn>
+                    <ContentsRowColumn>{report.author.name}</ContentsRowColumn>
+                    <ContentsRowColumn>{formatDate(report.createdAt)}</ContentsRowColumn>
                   </TeamReportsRow>
                 ))}
-              </ReportsTable>
+              </ContentsTable>
               {this.isPrevPageShowable(location) && (
                 <span>
                   <button onClick={() => this.prevPage(currentPage, teamId)}>◀︎Prev</button>{' '}

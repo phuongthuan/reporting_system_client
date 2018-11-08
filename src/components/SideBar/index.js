@@ -35,9 +35,14 @@ const SideBar = () => (
                   </li>
 
                   {team && !isEmpty(team) && (
-                    <li>
-                      <Link to={`/teams/${team.id}/reports`}>Team's Daily Reports</Link>
-                    </li>
+                    <Fragment>
+                      <li>
+                        <Link to={`/teams/${team.id}/reports`}>Team's Daily Reports</Link>
+                      </li>
+                      <li>
+                        <Link to={`/teams/${team.id}/members`}>Team Members List</Link>
+                      </li>
+                    </Fragment>
                   )}
 
                   <li>
