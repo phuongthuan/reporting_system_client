@@ -41,11 +41,11 @@ export const FormFieldStyles = styled(Form.Field)`
 `;
 
 export const TextAreaStyles = styled(Form.TextArea)`
-  width: 720px;
+  width: 900px;
 `;
 
 export const TextInputStyles = styled(Form.Input)`
-  width: 720px;
+  width: 900px;
 `;
 
 export const SpinnerWrapper = styled.div`

@@ -3,10 +3,10 @@ import { Form } from 'semantic-ui-react';
 import { Emoji } from 'emoji-mart';
 
 const RadioButton = ({
-  field: { name, value, onChange },
+  value,
+  onChange,
   id,
   label,
-  defaultChecked,
   className,
   ...props
 }) => (

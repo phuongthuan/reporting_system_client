@@ -1,10 +1,10 @@
 import React from 'react'
 import isEmpty from 'lodash/isEmpty';
 import {
-  TextError,
   FormGroup,
   FormFieldStyles,
-  TextAreaStyles
+  TextAreaStyles,
+  TextError
 } from '../../styles/App';
 
 const TextArea = ({
@@ -13,11 +13,10 @@ const TextArea = ({
   value,
   error,
   onChange,
-  className,
   initStates,
   ...props
 }) => (
-  <FormGroup className={className}>
+  <FormGroup>
     {isEmpty(error) ? (
       <FormFieldStyles>
         <TextAreaStyles

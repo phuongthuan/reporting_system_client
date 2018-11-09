@@ -35,17 +35,20 @@ const HomePage = Loadable({
 
 const AuthPage = Loadable({
   loader: () => import('containers/AuthPage'),
-  loading
+  loading,
+  delay: 300
 });
 
 const MemberPage = Loadable({
   loader: () => import('containers/MemberPage'),
-  loading
+  loading,
+  delay: 300
 });
 
 const TeamPage = Loadable({
   loader: () => import('containers/TeamPage'),
-  loading
+  loading,
+  delay: 300
 });
 
 const DailyReportPage = Loadable({
@@ -68,7 +71,8 @@ const ProfilePage = Loadable({
 
 const AdminPage = Loadable({
   loader: () => import('containers/AdminPage'),
-  loading
+  loading,
+  delay: 300
 });
 
 const App = () => (

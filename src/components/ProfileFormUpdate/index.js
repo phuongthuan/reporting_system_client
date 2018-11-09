@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 import { Formik } from 'formik';
 import { Form, Message } from 'semantic-ui-react';
-import { CenterWrapper, SpinnerWrapper } from '../../styles/App';
+import { CenterWrapper } from '../../styles/App';
 import Spinner from '../Spinner';
 import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
@@ -11,13 +11,8 @@ import AsyncButton from '../AsyncButton';
 const ProfileFormUpdate = () => (
   <Query query={GET_PROFILE_QUERY}>
     {({ data, loading, error }) => {
-      if (loading) {
-        return (
-          <SpinnerWrapper bgColor="#FFFFFF">
-            <Spinner />
-          </SpinnerWrapper>
-        );
-      }
+
+      if (loading) return <Spinner />;
 
       if (error) return <div>Error: {error.message}</div>;
 
@@ -65,7 +60,7 @@ const ProfileFormUpdate = () => (
                     success={status ? status.success : false}
                   >
                     <TextInput
-                      disabled
+                      readOnly
                       type="text"
                       label="Name"
                       name="name"
@@ -73,7 +68,7 @@ const ProfileFormUpdate = () => (
                     />
 
                     <TextInput
-                      disabled
+                      readOnly
                       type="text"
                       label="Email"
                       name="email"
@@ -99,6 +94,7 @@ const ProfileFormUpdate = () => (
                     />
 
                     <TextInput
+                      readOnly
                       type="text"
                       label="Avatar"
                       name="avatar"
@@ -108,7 +104,7 @@ const ProfileFormUpdate = () => (
                     />
 
                     <TextInput
-                      disabled
+                      readOnly
                       type="text"
                       label="Team"
                       name="team"
