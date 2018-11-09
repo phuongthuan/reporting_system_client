@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import Spinner from 'components/Spinner';
-import { Divider, Header, Image } from 'semantic-ui-react';
+import { Header, Image } from 'semantic-ui-react';
 import isEmpty from 'lodash/isEmpty';
 import uuidv1 from 'uuid/v1';
-import { ContentWrapper, SpinnerWrapper } from '../../styles/App';
+import { ContentWrapper } from '../../styles/App';
 import { MemberListHeader, MemberListRow, RoleTag } from '../../styles/MemberList';
 import { ContentsTable, ContentsHeaderColumn, ContentsRowColumn } from '../../styles/ContentsTable';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -22,28 +22,21 @@ class MemberListContainer extends Component {
     if (match.params.id !== teamId) return <p>error: You are not the leader of this team!</p>;
 
     return (
-      <Query
-        query={TEAM_MEMBERS_QUERY}
-        variables={{
-          teamId
-        }}
-      >
-        {({ data, loading, error }) => {
-          if (loading) {
+      <ContentWrapper>
+        <Header as='h3' dividing>Team Member List</Header>
+        <Query
+          query={TEAM_MEMBERS_QUERY}
+          variables={{
+            teamId
+          }}
+        >
+          {({ data, loading, error }) => {
+
+            if (loading) return <Spinner/>;
+
+            if (error) return <ErrorMessage error={error}/>;
+
             return (
-              <SpinnerWrapper bgColor="#FFFFFF">
-                <Spinner />
-              </SpinnerWrapper>
-            );
-          }
-
-          if (error) return <ErrorMessage error={error} />;
-
-          return (
-            <ContentWrapper>
-              <Header>Team Member List</Header>
-              <Divider />
-
               <ContentsTable>
                 <MemberListHeader>
                   {headerItems.map(item => (
@@ -55,7 +48,7 @@ class MemberListContainer extends Component {
                   <MemberListRow key={user.id}>
                     <ContentsRowColumn>{i + 1}</ContentsRowColumn>
                     <ContentsRowColumn>
-                      <Image src={user.avatar} size="mini" avatar />
+                      <Image src={user.avatar} size="mini" avatar/>
                     </ContentsRowColumn>
                     <ContentsRowColumn>{user.name}</ContentsRowColumn>
                     <ContentsRowColumn>{user.email}</ContentsRowColumn>
@@ -68,10 +61,10 @@ class MemberListContainer extends Component {
                   </MemberListRow>
                 ))}
               </ContentsTable>
-            </ContentWrapper>
-          );
-        }}
-      </Query>
+            );
+          }}
+        </Query>
+      </ContentWrapper>
     );
   }
 }

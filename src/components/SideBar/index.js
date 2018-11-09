@@ -25,7 +25,7 @@ const SideBar = () => (
                 <Link to="/reports/new">Create Daily Report</Link>
               </li>
               <li>
-                <Link to="/reports">Your Daily Reports</Link>
+                <Link to="/reports">Daily Reports</Link>
               </li>
 
               {roles.includes('TEAM_LEADER') && (
@@ -49,6 +49,12 @@ const SideBar = () => (
                     <Link to="/statistic">Statistic</Link>
                   </li>
                 </Fragment>
+              )}
+
+              {roles.includes('GROUP_LEADER') && (
+                <li>
+                  <Link to="/teams">Teams Management</Link>
+                </li>
               )}
               <li>
                 <SignOut />
