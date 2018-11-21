@@ -7,6 +7,7 @@ import { CenterWrapper } from '../../styles/App';
 import Spinner from '../Spinner';
 import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
+import ErrorMessage from '../ErrorMessage';
 
 const ProfileFormUpdate = () => (
   <Query query={GET_PROFILE_QUERY}>
@@ -14,7 +15,7 @@ const ProfileFormUpdate = () => (
 
       if (loading) return <Spinner />;
 
-      if (error) return <div>Error: {error.message}</div>;
+      if (error) return <ErrorMessage error={error} />;
 
       const { id, name, avatar, email, address, phone, team } = data.me;
 
