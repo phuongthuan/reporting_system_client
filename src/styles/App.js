@@ -1,5 +1,8 @@
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import { Form } from 'semantic-ui-react';
+import Select from 'react-select';
+
+const inputWidth = '900px';
 
 export const MainWrapper = styled.div`
   display: flex;
@@ -22,7 +25,6 @@ export const ContentWrapper = styled.div`
 
 export const CenterWrapper = styled.div`
   display: flex;
-  height: 100vh;
 `;
 
 export const FormGroup = styled.div`
@@ -33,7 +35,7 @@ export const FormGroup = styled.div`
 
 export const TextError = styled.small`
   color: red;
-  margin-bottom: 1em;
+  /* margin-bottom: 1em; */
 `;
 
 export const FormFieldStyles = styled(Form.Field)`
@@ -41,11 +43,23 @@ export const FormFieldStyles = styled(Form.Field)`
 `;
 
 export const TextAreaStyles = styled(Form.TextArea)`
-  width: 900px;
+  width: ${inputWidth};
 `;
 
 export const TextInputStyles = styled(Form.Input)`
-  width: 900px;
+  width: ${inputWidth};
+`;
+
+export const SelectStyles = styled(Select)`
+  width: ${inputWidth};
+`;
+
+export const LabelStyles = styled.label`
+  ${props =>
+    props.error &&
+    css`
+      color: #9f3a38 !important;
+    `}
 `;
 
 export const SpinnerWrapper = styled.div`

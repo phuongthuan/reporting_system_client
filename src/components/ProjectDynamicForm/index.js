@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import { Button, Icon, Loader, Segment } from 'semantic-ui-react';
 import gql from 'graphql-tag';
+import uuidv1 from 'uuid/v1';
 import ErrorMessage from '../ErrorMessage';
 
 class ProjectDynamicForm extends Component {
-
-  handleProjectChange = (idx) => (evt) => {
+  handleProjectChange = idx => evt => {
     const { activities } = this.props;
     const newActivity = activities.map((activity, sidx) => {
       if (idx !== sidx) return activity;
@@ -21,7 +21,7 @@ class ProjectDynamicForm extends Component {
     this.setState({ activities: activities.concat([{ id: '' }]) });
   };
 
-  handleRemoveProject = (idx) => () => {
+  handleRemoveProject = idx => () => {
     const { activities } = this.props;
     this.setState({ activities: activities.filter((a, aidx) => idx !== aidx) });
   };
@@ -32,32 +32,35 @@ class ProjectDynamicForm extends Component {
     return (
       <Segment padded compact>
         <Query query={GET_PROJECT_OF_MEMBER}>
-          {({ data, loading, error}) => {
-
-            if (loading) return <Loader size='small' active inline='centered' />;
+          {({ data, loading, error }) => {
+            if (loading) return <Loader size="small" active inline="centered" />;
             if (error) return <ErrorMessage error={error} />;
 
             return (
               <div>
                 {activities.map((project, idx) => (
-                  <div key={idx}>
+                  <div key={uuidv1()}>
                     <select value={project.id} onChange={this.handleProjectChange(idx)}>
-                      {data.me.projects.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
+                      {data.me.projects.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.title}
+                        </option>
+                      ))}
                     </select>
-                    <Button size='tiny' type="button" onClick={this.handleRemoveProject(idx)} icon>
-                      <Icon name='remove circle' />
+                    <Button size="tiny" type="button" onClick={this.handleRemoveProject(idx)} icon>
+                      <Icon name="remove circle" />
                     </Button>
                   </div>
                 ))}
               </div>
-            )
+            );
           }}
         </Query>
 
-        <Button size='tiny' onClick={this.handleAddProject}><Icon name='add square'/>
+        <Button size="tiny" onClick={this.handleAddProject}>
+          <Icon name="add square" />
           Add new activity
         </Button>
-
       </Segment>
     );
   }

@@ -12,7 +12,6 @@ import ErrorMessage from '../ErrorMessage';
 const ProfileFormUpdate = () => (
   <Query query={GET_PROFILE_QUERY}>
     {({ data, loading, error }) => {
-
       if (loading) return <Spinner />;
 
       if (error) return <ErrorMessage error={error} />;
@@ -139,7 +138,6 @@ const GET_PROFILE_QUERY = gql`
       avatar
       address
       phone
-      roles
       team {
         id
         name

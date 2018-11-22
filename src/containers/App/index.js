@@ -63,6 +63,12 @@ const WeeklyReportPage = Loadable({
   delay: 300
 });
 
+const ProjectPage = Loadable({
+  loader: () => import('containers/ProjectPage'),
+  loading,
+  delay: 300
+});
+
 const ProfilePage = Loadable({
   loader: () => import('containers/ProfilePage'),
   loading,
@@ -83,6 +89,7 @@ const App = () => (
       <PrivateRoute location={location} path="/members" component={MemberPage} />
       <PrivateRoute location={location} path="/reports" component={DailyReportPage} />
       <PrivateRoute location={location} path="/weekly-reports" component={WeeklyReportPage} />
+      <PrivateRoute location={location} path="/projects" component={ProjectPage} />
       <PrivateRoute location={location} path="/teams" component={TeamPage} />
       <PrivateRoute location={location} path="/profile" component={ProfilePage} />
       <PrivateRoute location={location} path="/admin" component={AdminPage} />

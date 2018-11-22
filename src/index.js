@@ -14,22 +14,18 @@ import App from './containers/App';
 import history from './utils/history';
 import 'semantic-ui-css/semantic.min.css';
 import './ress.min.css';
+import './common.style';
 import { SERVER_PROD_URL, WS_PROD_URL } from './config';
 
 const httpUri =
-  process.env.NODE_ENV === 'production'
-    ? SERVER_PROD_URL
-    : process.env.REACT_APP_GRAPHQL_URI;
+  process.env.NODE_ENV === 'production' ? SERVER_PROD_URL : process.env.REACT_APP_GRAPHQL_URI;
 
 const httpLink = new HttpLink({
   credentials: 'include',
   uri: httpUri
 });
 
-const wsUri =
-  process.env.NODE_ENV === 'production'
-    ? WS_PROD_URL
-    : process.env.REACT_APP_WS_URI;
+const wsUri = process.env.NODE_ENV === 'production' ? WS_PROD_URL : process.env.REACT_APP_WS_URI;
 
 const wsLink = new WebSocketLink({
   uri: wsUri,
