@@ -55,7 +55,10 @@ const SideBar = () => (
               {rolesArray.includes('GROUP_LEADER') && (
                 <Fragment>
                   <li>
-                    <Link to="/projects/new">New Project</Link>
+                    <Link to="/projects">Projects List</Link>
+                  </li>
+                  <li>
+                    <Link to="/projects/new">Create Project</Link>
                   </li>
                   <li>
                     <Link to="/teams">Teams Management</Link>

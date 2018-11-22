@@ -3,8 +3,8 @@ import isEmpty from 'lodash/isEmpty';
 import { Emoji } from 'emoji-mart';
 import queryString from 'query-string';
 import { Header, Icon } from 'semantic-ui-react';
-import DeleteBtn from 'components/DeleteBtn';
-import { IconBtn, ReportsHeader, ReportsRow, SearchInput } from 'components/Shared/Reports/styles';
+import DailyReportDelete from 'components/DailyReportDelete';
+import { ReportsHeader, ReportsRow, SearchInput } from 'components/Shared/Reports/styles';
 import Spinner from 'components/Spinner';
 import gql from 'graphql-tag';
 import { compose, graphql, Query } from 'react-apollo';
@@ -13,7 +13,12 @@ import { ContentWrapper } from '../../styles/App';
 import { headerItems, itemsAmount } from './constants';
 import formatDate from '../../utils/formatDate';
 
-import { ContentsTable, ContentsHeaderColumn, ContentsRowColumn } from '../../styles/ContentsTable';
+import {
+  ContentsTable,
+  ContentsHeaderColumn,
+  ContentsRowColumn,
+  IconBtn
+} from '../../styles/ContentsTable';
 import ErrorMessage from '../../components/ErrorMessage';
 
 const DAILY_REPORTS_QUERY = gql`
@@ -114,10 +119,11 @@ class DailyReportContainer extends Component {
 
     return (
       <ContentWrapper>
-        <Header as='h3' dividing>Daily Reports</Header>
+        <Header as="h3" dividing>
+          Daily Reports
+        </Header>
         <Query query={DAILY_REPORTS_QUERY} variables={this.getQueryVariables(currentPage)}>
           {({ data, loading, error }) => {
-
             if (loading) return <Spinner />;
 
             if (error) return <ErrorMessage error={error} />;
@@ -168,7 +174,7 @@ class DailyReportContainer extends Component {
                           />
                         </IconBtn>
 
-                        <DeleteBtn
+                        <DailyReportDelete
                           report={report}
                           location={location}
                           count={count}

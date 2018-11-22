@@ -23,7 +23,9 @@ class MemberListContainer extends Component {
 
     return (
       <ContentWrapper>
-        <Header as='h3' dividing>Team Member List</Header>
+        <Header as="h3" dividing>
+          Team Member List
+        </Header>
         <Query
           query={TEAM_MEMBERS_QUERY}
           variables={{
@@ -31,10 +33,9 @@ class MemberListContainer extends Component {
           }}
         >
           {({ data, loading, error }) => {
+            if (loading) return <Spinner />;
 
-            if (loading) return <Spinner/>;
-
-            if (error) return <ErrorMessage error={error}/>;
+            if (error) return <ErrorMessage error={error} />;
 
             return (
               <ContentsTable>
@@ -48,14 +49,14 @@ class MemberListContainer extends Component {
                   <MemberListRow key={user.id}>
                     <ContentsRowColumn>{i + 1}</ContentsRowColumn>
                     <ContentsRowColumn>
-                      <Image src={user.avatar} size="mini" avatar/>
+                      <Image src={user.avatar} size="mini" avatar />
                     </ContentsRowColumn>
                     <ContentsRowColumn>{user.name}</ContentsRowColumn>
                     <ContentsRowColumn>{user.email}</ContentsRowColumn>
                     <ContentsRowColumn>{user.phone}</ContentsRowColumn>
                     <ContentsRowColumn>
                       {user.roles.map(role => (
-                        <RoleTag key={uuidv1()}>{role}</RoleTag>
+                        <RoleTag key={uuidv1()}>{role.name}</RoleTag>
                       ))}
                     </ContentsRowColumn>
                   </MemberListRow>
@@ -77,7 +78,9 @@ const TEAM_MEMBERS_QUERY = gql`
       name
       email
       phone
-      roles
+      roles {
+        name
+      }
     }
   }
 `;

@@ -60,22 +60,23 @@ class DailyReportContainer extends Component {
 
     return (
       <ContentWrapper>
-        <Header as='h3' dividing>Team's Daily Reports</Header>
+        <Header as="h3" dividing>
+          Team's Daily Reports
+        </Header>
         <Query
           query={TEAM_DAILY_REPORTS_QUERY}
           variables={this.getQueryVariables(currentPage, teamId)}
         >
           {({ data, error, loading }) => {
+            if (loading) return <Spinner />;
 
-            if (loading) return <Spinner/>;
-
-            if (error) return <ErrorMessage error={error}/>;
+            if (error) return <ErrorMessage error={error} />;
 
             const { count } = data.dailyReports;
 
             return (
               <Fragment>
-                <SearchInput icon="search" iconPosition="left" placeholder="Type Something ..."/>
+                <SearchInput icon="search" iconPosition="left" placeholder="Type Something ..." />
                 <ContentsTable>
                   <TeamReportsHeader>
                     {headerItems.map(item => (
@@ -87,12 +88,16 @@ class DailyReportContainer extends Component {
                     <TeamReportsRow key={report.id}>
                       <ContentsRowColumn>{i + 1}</ContentsRowColumn>
                       <ContentsRowColumn>
-                        <Emoji emoji={report.emotion} size={24}/>
+                        <Emoji emoji={report.emotion} size={24} />
                       </ContentsRowColumn>
                       <ContentsRowColumn onClick={() => history.push(`/reports/${report.id}`)}>
                         <a>{report.title}</a>
                       </ContentsRowColumn>
-                      <ContentsRowColumn>{report.achievement}</ContentsRowColumn>
+                      <ContentsRowColumn>
+                        {report.tasks.map(t => (
+                          <p key={t.id}>{t.project.title}</p>
+                        ))}
+                      </ContentsRowColumn>
                       <ContentsRowColumn>{report.plan}</ContentsRowColumn>
                       <ContentsRowColumn>{report.author.name}</ContentsRowColumn>
                       <ContentsRowColumn>{formatDate(report.createdAt)}</ContentsRowColumn>
@@ -101,8 +106,7 @@ class DailyReportContainer extends Component {
                 </ContentsTable>
                 {this.isPrevPageShowable(location) && (
                   <span>
-                    <button onClick={() => this.prevPage(currentPage, teamId)}>◀︎Prev</button>
-                    {' '}
+                    <button onClick={() => this.prevPage(currentPage, teamId)}>◀︎Prev</button>{' '}
                   </span>
                 )}
                 {this.isNextPageShowable(currentPage, count) && (
@@ -119,10 +123,10 @@ class DailyReportContainer extends Component {
 
 const TEAM_DAILY_REPORTS_QUERY = gql`
   query TEAM_DAILY_REPORTS_QUERY(
-  $teamId: ID
-  $first: Int
-  $skip: Int
-  $orderBy: DailyReportOrderByInput
+    $teamId: ID
+    $first: Int
+    $skip: Int
+    $orderBy: DailyReportOrderByInput
   ) {
     dailyReports(
       where: { author: { team: { id: $teamId } } }
@@ -135,7 +139,6 @@ const TEAM_DAILY_REPORTS_QUERY = gql`
         id
         title
         emotion
-        achievement
         plan
         createdAt
         author {
@@ -143,6 +146,16 @@ const TEAM_DAILY_REPORTS_QUERY = gql`
           team {
             name
           }
+        }
+        tasks {
+          id
+          title
+          project {
+            id
+            title
+          }
+          url
+          logtime
         }
       }
     }

@@ -35,17 +35,4 @@ const ReportsRow = styled.div`
   }
 `;
 
-const IconBtn = styled.div`
-  font-size: 0.6rem;
-  padding: 0.2rem;
-  display: inline-block;
-  line-height: 1rem;
-  cursor: pointer;
-
-  @media (max-width: 1024px) {
-    padding: 0;
-    font-size: 0.2rem;
-  }
-`;
-
-export { SearchInput, ReportsHeader, ReportsRow, IconBtn };
+export { SearchInput, ReportsHeader, ReportsRow };
