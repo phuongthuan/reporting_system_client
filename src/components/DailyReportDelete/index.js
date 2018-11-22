@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { Button, Icon, Modal } from 'semantic-ui-react';
-import { IconBtn } from 'components/Shared/Reports/styles';
 import queryString from 'query-string';
 import { itemsAmount } from 'containers/DailyReportPage/constants';
 import isEmpty from 'lodash/isEmpty';
+import { IconBtn } from '../../styles/ContentsTable';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 import getDailyReportsCacheVariables from '../../utils/getDailyReportsCacheVariables';
 import ErrorMessage from '../ErrorMessage';
@@ -58,8 +58,7 @@ function deleteReportLoopHandler(store, variables, deleteDailyReport) {
   updateCacheLoop(store, variables, newVariables);
 }
 
-class DeleteBtn extends Component {
-
+class DailyReportDelete extends Component {
   state = { open: false };
 
   closeConfigShow = (closeOnEscape, closeOnDimmerClick) => () => {
@@ -113,7 +112,6 @@ class DeleteBtn extends Component {
         }}
       >
         {(deleteDailyReport, { error }) => {
-
           if (error) return <ErrorMessage error={error} />;
 
           return (
@@ -135,7 +133,7 @@ class DeleteBtn extends Component {
                 closeOnDimmerClick={closeOnDimmerClick}
                 onClose={this.no}
               >
-                <Modal.Header as='h4'>Confirm Delete</Modal.Header>
+                <Modal.Header as="h4">Confirm Delete</Modal.Header>
                 <Modal.Content>
                   <p>Are you sure you want to delete?</p>
                 </Modal.Content>
@@ -147,9 +145,9 @@ class DeleteBtn extends Component {
                     size="mini"
                     onClick={() => this.yes(deleteDailyReport, report)}
                     positive
-                    labelPosition='right'
-                    icon='checkmark'
-                    content='Yes'
+                    labelPosition="right"
+                    icon="checkmark"
+                    content="Yes"
                   />
                 </Modal.Actions>
               </Modal>
@@ -169,4 +167,4 @@ export const DELETE_DAILY_REPORT_MUTATION = gql`
   }
 `;
 
-export default DeleteBtn;
+export default DailyReportDelete;

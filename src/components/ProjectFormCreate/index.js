@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
-import { Form, Message, Loader } from 'semantic-ui-react';
+import { Form, Message } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import { Formik } from 'formik';
+import Spinner from 'components/Spinner';
 
 import * as Yup from 'yup';
 import SelectInput from 'components/SelectInput';
@@ -11,7 +12,7 @@ import AsyncButton from '../AsyncButton';
 import { CenterWrapper } from '../../styles/App';
 import ErrorMessage from '../ErrorMessage';
 
-const ProjectSchema = Yup.object().shape({
+export const ProjectSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   teamLeader: Yup.string().required('Team leader is required'),
   members: Yup.array().min(1, 'Pick at least 1 member')
@@ -87,8 +88,7 @@ const ProjectFormCreate = () => (
                     <Query query={ALL_USERS_QUERY}>
                       {({ data, loading, error }) => {
                         // Show <Loader /> component when TEAM_LEADERS_QUERY or ALL_USERS_QUERY are loading
-                        if (leaderLoading || loading)
-                          return <Loader size="tiny" active inline="centered" />;
+                        if (leaderLoading || loading) return <Spinner />;
                         if (leaderError) return <ErrorMessage error={leaderError} />;
                         if (error) return <ErrorMessage error={error} />;
 
@@ -156,7 +156,7 @@ const CREATE_PROJECT_MUTATION = gql`
   }
 `;
 
-const ALL_USERS_QUERY = gql`
+export const ALL_USERS_QUERY = gql`
   query ALL_USERS_QUERY {
     users {
       id
@@ -166,7 +166,7 @@ const ALL_USERS_QUERY = gql`
   }
 `;
 
-const TEAM_LEADERS_QUERY = gql`
+export const TEAM_LEADERS_QUERY = gql`
   query TEAM_LEADERS_QUERY {
     users(where: { roles_some: { name: "TEAM_LEADER" } }) {
       id
