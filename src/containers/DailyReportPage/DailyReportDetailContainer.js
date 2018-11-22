@@ -26,7 +26,7 @@ const DailyReportDetailContainer = ({ match }) => (
 
       if (!data.dailyReport) return <div>Daily Report Not Found for ID {match.params.id}</div>;
 
-      const { title, emotion, achievement, plan, comment } = data.dailyReport;
+      const { title, emotion, tasks, plan, comment } = data.dailyReport;
 
       return (
         <ContentWrapper>
@@ -53,14 +53,10 @@ const DailyReportDetailContainer = ({ match }) => (
             </p>
 
             <Header as='h5' dividing>
-              Today Achievement
+              Tasks
             </Header>
             <div>
-              <TextArea
-                style={{ width: '100%'}}
-                readOnly
-                value={achievement}
-              />
+              {tasks.map(task => <p key={task.id}>{task.title} - {task.url} - {task.logtime}</p>)}
             </div>
 
             <Header as='h5' dividing>
@@ -74,7 +70,7 @@ const DailyReportDetailContainer = ({ match }) => (
               />
             </div>
 
-            {comment !== '' && (
+            {comment !== '' && comment !== null && (
               <Fragment>
                 <Header as='h5' dividing>
                   Comment
@@ -102,7 +98,16 @@ const SINGLE_REPORT_QUERY = gql`
       id
       title
       emotion
-      achievement
+      tasks {
+        id
+        title
+        project {
+          id
+          title
+        }
+        url
+        logtime
+      }
       plan
       comment
     }

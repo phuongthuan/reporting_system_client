@@ -2,7 +2,7 @@ const headerItems = [
   'No',
   'Emotion',
   'Title',
-  'Today Achievement',
+  'Activities',
   'Next Day\'s plan',
   'Date',
   'Actions'

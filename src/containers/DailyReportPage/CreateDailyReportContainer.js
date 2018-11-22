@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Divider } from 'semantic-ui-react';
-import DailyReportForm from 'components/DailyReportForm';
 import { ContentWrapper } from '../../styles/App';
+import DailyReportFormCreate from '../../components/DailyReportFormCreate';
 
 class CreateDailyReportContainer extends Component {
   render() {
@@ -11,7 +11,7 @@ class CreateDailyReportContainer extends Component {
           New Daily Report
         </Header>
         <Divider/>
-        <DailyReportForm/>
+        <DailyReportFormCreate />
       </ContentWrapper>
     );
   }

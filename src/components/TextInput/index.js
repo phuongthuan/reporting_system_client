@@ -1,10 +1,10 @@
 import React from 'react'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty';
 import {
-  TextError,
   FormGroup,
   FormFieldStyles,
-  TextInputStyles
+  TextInputStyles,
+  TextError
 } from '../../styles/App';
 
 const TextInput = ({
@@ -12,25 +12,19 @@ const TextInput = ({
   id,
   label,
   value,
-  defaultValue,
   error,
   onChange,
-  className,
-  required,
-  initStates,
   ...props
 }) => (
-  <FormGroup className={className}>
+  <FormGroup>
     {isEmpty(error) ? (
       <FormFieldStyles>
         <TextInputStyles
           fluid
-          size="small"
           label={label}
           type={type}
           autoComplete="off"
           value={value}
-          defaultValue={defaultValue}
           onChange={onChange}
           {...props}
         />
@@ -40,12 +34,10 @@ const TextInput = ({
         <TextInputStyles
           fluid
           error={!!error}
-          size="small"
           label={label}
           type={type}
           autoComplete="off"
           value={value}
-          defaultValue={defaultValue}
           onChange={onChange}
           {...props}
         />

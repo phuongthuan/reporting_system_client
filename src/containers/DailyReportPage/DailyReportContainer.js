@@ -24,7 +24,16 @@ const DAILY_REPORTS_QUERY = gql`
         id
         emotion
         title
-        achievement
+        tasks {
+          id
+          title
+          project {
+            id
+            title
+          }
+          url
+          logtime
+        }
         plan
         comment
         createdAt
@@ -147,7 +156,7 @@ class DailyReportContainer extends Component {
                       <ContentsRowColumn onClick={() => history.push(`${match.path}/${report.id}`)}>
                         <a>{report.title}</a>
                       </ContentsRowColumn>
-                      <ContentsRowColumn>{report.achievement}</ContentsRowColumn>
+                      <ContentsRowColumn>{report.tasks.map(t => <p key={t.id}>{t.project.title}</p>)}</ContentsRowColumn>
                       <ContentsRowColumn>{report.plan}</ContentsRowColumn>
                       <ContentsRowColumn>{formatDate(report.createdAt)}</ContentsRowColumn>
                       <ContentsRowColumn>
@@ -197,4 +206,5 @@ export default compose(
   }),
   graphql(UPDATE_USER_DAILY_REPORTS_COUNT_MUTATION, { name: 'updateUserDailyReportsCount' })
 )(DailyReportContainer);
+
 export { DAILY_REPORTS_QUERY };
