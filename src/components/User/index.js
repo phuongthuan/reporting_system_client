@@ -10,7 +10,9 @@ const CURRENT_USER_QUERY = gql`
       name
       email
       avatar
-      roles
+      roles {
+        name
+      }
       team {
         id
       }

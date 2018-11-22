@@ -10,6 +10,7 @@ const SideBar = () => (
   <User>
     {({ data, loading, error }) => {
       const { avatar, roles, team } = data.me;
+      const rolesArray = roles.map(role => role.name);
       return (
         <Fragment>
           {loading && <Spinner />}
@@ -28,7 +29,7 @@ const SideBar = () => (
                 <Link to="/reports">Daily Reports</Link>
               </li>
 
-              {roles.includes('TEAM_LEADER') && (
+              {rolesArray.includes('TEAM_LEADER') && (
                 <Fragment>
                   <li>
                     <Link to="/weekly-reports/new">Create Weekly Report</Link>
@@ -51,10 +52,15 @@ const SideBar = () => (
                 </Fragment>
               )}
 
-              {roles.includes('GROUP_LEADER') && (
-                <li>
-                  <Link to="/teams">Teams Management</Link>
-                </li>
+              {rolesArray.includes('GROUP_LEADER') && (
+                <Fragment>
+                  <li>
+                    <Link to="/projects/new">New Project</Link>
+                  </li>
+                  <li>
+                    <Link to="/teams">Teams Management</Link>
+                  </li>
+                </Fragment>
               )}
               <li>
                 <SignOut />
