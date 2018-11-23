@@ -1,11 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Button, Icon, Modal } from 'semantic-ui-react';
 import queryString from 'query-string';
 import { itemsAmount } from 'containers/DailyReportPage/constants';
 import isEmpty from 'lodash/isEmpty';
-import { IconBtn } from '../../styles/ContentsTable';
+import ModalConfirm from 'components/ModalConfirm';
 import { DAILY_REPORTS_QUERY } from '../../containers/DailyReportPage/DailyReportContainer';
 import getDailyReportsCacheVariables from '../../utils/getDailyReportsCacheVariables';
 import ErrorMessage from '../ErrorMessage';
@@ -59,30 +58,8 @@ function deleteReportLoopHandler(store, variables, deleteDailyReport) {
 }
 
 class DailyReportDelete extends Component {
-  state = { open: false };
-
-  closeConfigShow = (closeOnEscape, closeOnDimmerClick) => () => {
-    this.setState({ closeOnEscape, closeOnDimmerClick, open: true });
-  };
-
-  handleDelete = (deleteDailyReport, report) => {
-    const { id } = report;
-    deleteDailyReport({ variables: { id } });
-  };
-
-  no = () => {
-    this.setState({ open: false });
-  };
-
-  yes = (deleteDailyReport, report) => {
-    this.setState({ open: false });
-    this.handleDelete(deleteDailyReport, report);
-  };
-
   render() {
-    const { report, location, count, updateUserDailyReportsCount } = this.props;
-    const { open, closeOnEscape, closeOnDimmerClick } = this.state;
-
+    const { id, location, count, updateUserDailyReportsCount } = this.props;
     return (
       <Mutation
         mutation={DELETE_DAILY_REPORT_MUTATION}
@@ -107,52 +84,14 @@ class DailyReportDelete extends Component {
           __typename: 'Mutation',
           deleteDailyReport: {
             __typename: 'DailyReport',
-            id: report.id
+            id
           }
         }}
       >
         {(deleteDailyReport, { error }) => {
           if (error) return <ErrorMessage error={error} />;
 
-          return (
-            <Fragment>
-              <IconBtn>
-                <Icon
-                  bordered
-                  inverted
-                  color="red"
-                  name="trash alternate"
-                  onClick={this.closeConfigShow(false, true)}
-                />
-              </IconBtn>
-
-              <Modal
-                size="mini"
-                open={open}
-                closeOnEscape={closeOnEscape}
-                closeOnDimmerClick={closeOnDimmerClick}
-                onClose={this.no}
-              >
-                <Modal.Header as="h4">Confirm Delete</Modal.Header>
-                <Modal.Content>
-                  <p>Are you sure you want to delete?</p>
-                </Modal.Content>
-                <Modal.Actions>
-                  <Button size="mini" onClick={this.no} negative>
-                    No
-                  </Button>
-                  <Button
-                    size="mini"
-                    onClick={() => this.yes(deleteDailyReport, report)}
-                    positive
-                    labelPosition="right"
-                    icon="checkmark"
-                    content="Yes"
-                  />
-                </Modal.Actions>
-              </Modal>
-            </Fragment>
-          );
+          return <ModalConfirm deleteMutation={deleteDailyReport} id={id} />;
         }}
       </Mutation>
     );
