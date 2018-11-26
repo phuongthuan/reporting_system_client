@@ -56,7 +56,7 @@ const ProjectListing = () => (
                     />
                   </IconBtn>
 
-                  <ProjectDelete />
+                  <ProjectDelete id={project.id} />
                 </ContentsRowColumn>
               </ProjectListRow>
             ))}
@@ -67,7 +67,7 @@ const ProjectListing = () => (
   </ContentWrapper>
 );
 
-const ALL_PROJECTS_QUERY = gql`
+export const ALL_PROJECTS_QUERY = gql`
   query ALL_PROJECTS_QUERY {
     projects {
       id

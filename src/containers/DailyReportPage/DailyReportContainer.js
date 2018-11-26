@@ -162,7 +162,11 @@ class DailyReportContainer extends Component {
                       <ContentsRowColumn onClick={() => history.push(`${match.path}/${report.id}`)}>
                         <a>{report.title}</a>
                       </ContentsRowColumn>
-                      <ContentsRowColumn>{report.tasks.map(t => <p key={t.id}>{t.project.title}</p>)}</ContentsRowColumn>
+                      <ContentsRowColumn>
+                        {report.tasks.map(t => (
+                          <p key={t.id}>{t.project.title}</p>
+                        ))}
+                      </ContentsRowColumn>
                       <ContentsRowColumn>{report.plan}</ContentsRowColumn>
                       <ContentsRowColumn>{formatDate(report.createdAt)}</ContentsRowColumn>
                       <ContentsRowColumn>
@@ -175,7 +179,7 @@ class DailyReportContainer extends Component {
                         </IconBtn>
 
                         <DailyReportDelete
-                          report={report}
+                          id={report.id}
                           location={location}
                           count={count}
                           updateUserDailyReportsCount={updateUserDailyReportsCount}

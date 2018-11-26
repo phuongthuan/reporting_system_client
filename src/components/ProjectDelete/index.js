@@ -1,70 +1,45 @@
-import React, { Fragment, Component } from 'react';
-import { Button, Icon, Modal } from 'semantic-ui-react';
-import { IconBtn } from '../../styles/ContentsTable';
-
-// This component inmplementation is not finished yet
-// TODO : Add Delete Mutation to handle delete project
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import { ALL_PROJECTS_QUERY } from 'components/ProjectListing';
+import ModalConfirm from 'components/ModalConfirm';
 
 class ProjectDelete extends Component {
-  state = {
-    open: false
-  };
-
-  closeConfigShow = (closeOnEscape, closeOnDimmerClick) => () => {
-    this.setState({ closeOnEscape, closeOnDimmerClick, open: true });
-  };
-
-  no = () => {
-    this.setState({ open: false });
-  };
-
-  yes = () => {
-    this.setState({ open: false });
-  };
-
   render() {
-    const { open, closeOnEscape, closeOnDimmerClick } = this.state;
+    const { id } = this.props;
 
     return (
-      <Fragment>
-        <IconBtn>
-          <Icon
-            bordered
-            inverted
-            color="red"
-            name="trash alternate"
-            onClick={this.closeConfigShow(false, true)}
-          />
-        </IconBtn>
+      <Mutation
+        mutation={DELETE_PROJECT_MUTATION}
+        update={(store, { data: { deleteProject } }) => {
+          const data = store.readQuery({ query: ALL_PROJECTS_QUERY });
+          data.projects = data.projects.filter(project => project.id !== deleteProject.id);
+          store.writeQuery({ query: ALL_PROJECTS_QUERY, data });
+        }}
+        optimisticResponse={{
+          __typename: 'Mutation',
+          deleteProject: {
+            __typename: 'Project',
+            id
+          }
+        }}
+      >
+        {(deleteProject, { error }) => {
+          if (error) return <p>Error: {error.message}</p>;
 
-        <Modal
-          size="mini"
-          open={open}
-          closeOnEscape={closeOnEscape}
-          closeOnDimmerClick={closeOnDimmerClick}
-          onClose={this.no}
-        >
-          <Modal.Header as="h4">Confirm Delete</Modal.Header>
-          <Modal.Content>
-            <p>Are you sure you want to delete?</p>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button size="mini" negative onClick={this.no}>
-              No
-            </Button>
-            <Button
-              size="mini"
-              onClick={this.yes}
-              positive
-              labelPosition="right"
-              icon="checkmark"
-              content="Yes"
-            />
-          </Modal.Actions>
-        </Modal>
-      </Fragment>
+          return <ModalConfirm deleteMutation={deleteProject} id={id} />;
+        }}
+      </Mutation>
     );
   }
 }
+
+const DELETE_PROJECT_MUTATION = gql`
+  mutation DELETE_PROJECT_MUTATION($id: ID!) {
+    deleteProject(id: $id) {
+      id
+    }
+  }
+`;
 
 export default ProjectDelete;
