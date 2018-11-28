@@ -84,7 +84,7 @@ class CreateTaskForm extends Component {
                           />
 
                           <TaskInput
-                            small
+                            width="100px"
                             type="number"
                             name="logtime"
                             value={task.logtime}
