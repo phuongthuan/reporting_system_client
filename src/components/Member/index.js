@@ -18,6 +18,7 @@ class Member extends React.Component {
       if (idx !== tidx) return task;
       return { ...task, [e.target.name]: e.target.value };
     });
+
     handleActivityChange(newTasks, index);
   };
 

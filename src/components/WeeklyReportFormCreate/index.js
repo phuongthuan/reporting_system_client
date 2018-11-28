@@ -9,10 +9,7 @@ import ErrorMessage from '../ErrorMessage';
 class WeeklyReportFormCreate extends Component {
 
   state = {
-    issue: '',
-    solution: '',
-    achievement: '',
-    summary: '',
+    comment: '',
     success: false
   };
 
@@ -59,10 +56,7 @@ class WeeklyReportFormCreate extends Component {
 
   resetForm = () => {
     this.setState({
-      issue: '',
-      solution: '',
-      achievement: '',
-      summary: '',
+      comment: '',
       membersActivities: []
     })
   };
@@ -79,7 +73,7 @@ class WeeklyReportFormCreate extends Component {
   };
 
   render() {
-    const { issue, solution, achievement, summary, membersActivities, description, success } = this.state;
+    const { comment, membersActivities, success } = this.state;
 
     return (
       <Mutation
@@ -97,10 +91,7 @@ class WeeklyReportFormCreate extends Component {
                 try {
                   await createWeeklyReport({
                     variables: {
-                      issue,
-                      solution,
-                      description,
-                      summary,
+                      comment,
                       membersActivities: membersActivities
                         .filter(member => member.activities.length > 0)
                         .map(m => ({
@@ -131,33 +122,9 @@ class WeeklyReportFormCreate extends Component {
 
               <TextArea
                 type="textarea"
-                label="Issue"
-                name="issue"
-                value={issue}
-                onChange={this.handleChange}
-              />
-
-              <TextArea
-                type="textarea"
-                label="Solution"
-                name="solution"
-                value={solution}
-                onChange={this.handleChange}
-              />
-
-              <TextArea
-                type="textarea"
-                label="Today Achievement"
-                name="achievement"
-                value={achievement}
-                onChange={this.handleChange}
-              />
-
-              <TextArea
-                type="textarea"
-                label="Summary"
-                name="summary"
-                value={summary}
+                label="Comment"
+                name="comment"
+                value={comment}
                 onChange={this.handleChange}
               />
 
@@ -185,27 +152,18 @@ class WeeklyReportFormCreate extends Component {
 
 const CREATE_WEEKLY_REPORT_MUTATION = gql`
   mutation CREATE_WEEKLY_REPORT_MUTATION (
-    $issue: String!
-    $solution: String!
-    $description: String
-    $summary: String!
+    $comment: String!
     $membersActivities: [UserActivityInput!]
   ) {
     createWeeklyReport(
-      issue: $issue
-      solution: $solution
-      description: $description
-      summary: $summary
+      comment: $comment
       membersActivities: $membersActivities
     ) {
       id
       membersActivities {
         id
       }
-      issue
-      solution
-      description
-      summary
+      comment
       createdAt
     }
   }
