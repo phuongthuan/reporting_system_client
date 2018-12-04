@@ -52,6 +52,12 @@ export const TextInputStyles = styled(Form.Input)`
 
 export const SelectStyles = styled(Select)`
   width: ${inputWidth};
+
+  ${props =>
+    props.width &&
+    css`
+      width: ${props.width} !important;
+    `}
 `;
 
 export const LabelStyles = styled.label`

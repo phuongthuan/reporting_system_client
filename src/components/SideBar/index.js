@@ -10,6 +10,7 @@ const SideBar = () => (
   <User>
     {({ data, loading, error }) => {
       const { avatar, roles, team } = data.me;
+      const { group } = team;
       const rolesArray = roles.map(role => role.name);
       return (
         <Fragment>
@@ -61,7 +62,7 @@ const SideBar = () => (
                     <Link to="/projects/new">Create Project</Link>
                   </li>
                   <li>
-                    <Link to="/teams">Teams Management</Link>
+                    <Link to={`/groups/${group.id}/teams`}>Teams Management</Link>
                   </li>
                 </Fragment>
               )}
