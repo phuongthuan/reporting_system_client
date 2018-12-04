@@ -51,6 +51,12 @@ const TeamPage = Loadable({
   delay: 300
 });
 
+const GroupPage = Loadable({
+  loader: () => import('containers/GroupPage'),
+  loading,
+  delay: 300
+});
+
 const DailyReportPage = Loadable({
   loader: () => import('containers/DailyReportPage'),
   loading,
@@ -91,6 +97,7 @@ const App = () => (
       <PrivateRoute location={location} path="/weekly-reports" component={WeeklyReportPage} />
       <PrivateRoute location={location} path="/projects" component={ProjectPage} />
       <PrivateRoute location={location} path="/teams" component={TeamPage} />
+      <PrivateRoute location={location} path="/groups" component={GroupPage} />
       <PrivateRoute location={location} path="/profile" component={ProfilePage} />
       <PrivateRoute location={location} path="/admin" component={AdminPage} />
       <Route component={NoMatch} />

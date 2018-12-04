@@ -5,17 +5,15 @@ import NoMatch from '../../utils/NoMatch';
 import { MainWrapper, RightContent, LeftContent } from '../../styles/App';
 import DailyReportContainer from './DailyReportContainer';
 import MemberListContainer from './MemberListContainer';
-import TeamContainer from './TeamContainer';
 import TeamDetailContainer from './TeamDetailContainer';
 
-const TeamPage = ({ match, userData })  => (
+const TeamPage = ({ match, userData }) => (
   <MainWrapper>
     <LeftContent>
       <SideBar />
     </LeftContent>
     <RightContent>
       <Switch>
-        <Route exact path={match.url} render={props => <TeamContainer {...props} />} />
         <Route
           exact
           path={`${match.path}/:id`}
@@ -29,7 +27,7 @@ const TeamPage = ({ match, userData })  => (
         <Route
           exact
           path={`${match.path}/:id/members`}
-          render={props => <MemberListContainer userData={userData} {...props} />}
+          render={props => <MemberListContainer {...props} />}
         />
         <Route component={NoMatch} />
       </Switch>

@@ -34,7 +34,7 @@ class SelectInput extends React.Component {
   };
 
   render() {
-    const { options, value, error, isMulti, name, placeholder } = this.props;
+    const { options, value, error, isMulti, name, placeholder, width } = this.props;
 
     return (
       <FormGroup>
@@ -48,6 +48,7 @@ class SelectInput extends React.Component {
             onBlur={this.handleBlur}
             value={value}
             styles={error ? errorStyles : styles}
+            width={width}
           />
           {!!error && <TextError> {error}</TextError>}
         </FormFieldStyles>

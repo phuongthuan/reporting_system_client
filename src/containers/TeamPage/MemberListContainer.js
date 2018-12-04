@@ -3,7 +3,6 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import Spinner from 'components/Spinner';
 import { Header, Image } from 'semantic-ui-react';
-import isEmpty from 'lodash/isEmpty';
 import uuidv1 from 'uuid/v1';
 import { ContentWrapper } from '../../styles/App';
 import { MemberListHeader, MemberListRow, RoleTag } from '../../styles/MemberList';
@@ -15,11 +14,7 @@ const headerItems = ['No', 'avatar', 'name', 'email', 'phone', 'roles'];
 class MemberListContainer extends Component {
   render() {
     const { match } = this.props;
-    const { team } = this.props.userData.me;
-    if (isEmpty(team)) return <p>error: You don't belong to any team!</p>;
-
-    const { id: teamId } = team;
-    if (match.params.id !== teamId) return <p>error: You are not the leader of this team!</p>;
+    const { id: teamId } = match.params;
 
     return (
       <ContentWrapper>
@@ -34,7 +29,6 @@ class MemberListContainer extends Component {
         >
           {({ data, loading, error }) => {
             if (loading) return <Spinner />;
-
             if (error) return <ErrorMessage error={error} />;
 
             return (
