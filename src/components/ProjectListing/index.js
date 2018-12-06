@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { Icon, Image } from 'semantic-ui-react';
 import Spinner from 'components/Spinner';
 import ProjectDelete from 'components/ProjectDelete';
+import isEmpty from 'lodash/isEmpty';
 import ErrorMessage from '../ErrorMessage';
 import { ContentWrapper } from '../../styles/App';
 import {
@@ -19,7 +20,7 @@ const headerItems = ['No', 'title', 'team leader', 'members', 'actions'];
 
 const ProjectListing = () => (
   <ContentWrapper>
-    <Query query={ALL_PROJECTS_QUERY}>
+    <Query query={ALL_PROJECTS_QUERY} variables={variables}>
       {({ data, loading, error }) => {
         if (loading) return <Spinner />;
         if (error) return <ErrorMessage error={error} />;
@@ -34,18 +35,26 @@ const ProjectListing = () => (
 
             {data.projects.map((project, idx) => (
               <ProjectListRow key={project.id}>
-                <ContentsRowColumn>{idx}</ContentsRowColumn>
+                <ContentsRowColumn>{idx + 1}</ContentsRowColumn>
                 <ContentsRowColumn onClick={() => history.push(`/projects/${project.id}`)}>
                   <a>{project.title}</a>
                 </ContentsRowColumn>
                 <ContentsRowColumn>
-                  <Image src={project.teamLeader.avatar} size="mini" avatar />
-                  {project.teamLeader.name}
+                  {project.teamLeader ? (
+                    <Fragment>
+                      <Image src={project.teamLeader.avatar} size="mini" avatar />
+                      {project.teamLeader.name}
+                    </Fragment>
+                  ) : (
+                    <p>No teamLeader assignend</p>
+                  )}
                 </ContentsRowColumn>
                 <ContentsRowColumn>
-                  {project.members.map(member => (
-                    <span key={member.id}>{member.name} </span>
-                  ))}
+                  {!isEmpty(project.members) ? (
+                    project.members.map(member => <span key={member.id}>{member.name} </span>)
+                  ) : (
+                    <p>No members assigned</p>
+                  )}
                 </ContentsRowColumn>
                 <ContentsRowColumn>
                   <IconBtn>
@@ -67,12 +76,17 @@ const ProjectListing = () => (
   </ContentWrapper>
 );
 
+export const variables = {
+  orderBy: 'createdAt_DESC'
+};
+
 export const ALL_PROJECTS_QUERY = gql`
-  query ALL_PROJECTS_QUERY {
-    projects {
+  query ALL_PROJECTS_QUERY($orderBy: ProjectOrderByInput) {
+    projects(orderBy: $orderBy) {
       id
       title
       teamLeader {
+        id
         name
         avatar
       }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { ALL_PROJECTS_QUERY } from 'components/ProjectListing';
+import { ALL_PROJECTS_QUERY, variables } from 'components/ProjectListing';
 import ModalConfirm from 'components/ModalConfirm';
 
 class ProjectDelete extends Component {
@@ -12,9 +12,11 @@ class ProjectDelete extends Component {
       <Mutation
         mutation={DELETE_PROJECT_MUTATION}
         update={(store, { data: { deleteProject } }) => {
-          const data = store.readQuery({ query: ALL_PROJECTS_QUERY });
-          data.projects = data.projects.filter(project => project.id !== deleteProject.id);
-          store.writeQuery({ query: ALL_PROJECTS_QUERY, data });
+          if (store.data.data.ROOT_QUERY['projects({"orderBy":"createdAt_DESC"})']) {
+            const data = store.readQuery({ query: ALL_PROJECTS_QUERY, variables });
+            data.projects = data.projects.filter(project => project.id !== deleteProject.id);
+            store.writeQuery({ query: ALL_PROJECTS_QUERY, data, variables });
+          }
         }}
         optimisticResponse={{
           __typename: 'Mutation',

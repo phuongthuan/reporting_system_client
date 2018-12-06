@@ -9,28 +9,22 @@ import ErrorMessage from '../../components/ErrorMessage';
 
 class UpdateDailyReportContainer extends Component {
   render() {
-
     const { loading, error, dailyReport } = this.props.data;
 
-    if (loading) return <Spinner/>;
+    if (loading) return <Spinner />;
 
     if (error) return <ErrorMessage error={error} />;
 
     return (
       <ContentWrapper>
-        <Header>
-          Update Daily Report
-        </Header>
-        <Divider/>
-        <DailyReportFormUpdate
-          dailyReport={dailyReport}
-          {...this.props}
-        />
+        <Header>Update Daily Report</Header>
+        <Divider />
+        <DailyReportFormUpdate dailyReport={dailyReport} {...this.props} />
       </ContentWrapper>
     );
   }
 }
 
 export default graphql(SINGLE_REPORT_QUERY, {
-  options: (props) => ({ variables: { id: props.match.params.id } })
+  options: props => ({ variables: { id: props.match.params.id } })
 })(UpdateDailyReportContainer);
