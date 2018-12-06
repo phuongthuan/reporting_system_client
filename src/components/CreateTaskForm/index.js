@@ -4,11 +4,16 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { TextError } from '../../styles/App';
 import ErrorMessage from '../ErrorMessage';
-import { CreateTaskFormWrapper, TaskContainerWrapper, TaskItem, SelectProject, TaskInput } from '../../styles/CreateTaskForm';
+import {
+  CreateTaskFormWrapper,
+  TaskContainerWrapper,
+  TaskItem,
+  SelectProject,
+  TaskInput
+} from '../../styles/CreateTaskForm';
 
 class CreateTaskForm extends Component {
-
-  handleTaskChange = (idx) => (e) => {
+  handleTaskChange = idx => e => {
     const { tasks, handleTaskChange } = this.props;
     const newTasks = tasks.map((task, tidx) => {
       if (idx !== tidx) return task;
@@ -20,11 +25,11 @@ class CreateTaskForm extends Component {
 
   handleAddNewTask = () => {
     const { handleAddNewTask } = this.props;
-    const newTask = { projectId: '', url: '', logtime: '' };
+    const newTask = { projectId: '', title: '', url: '', logtime: '' };
     handleAddNewTask(newTask);
   };
 
-  handleRemoveTask = (idx) => () => {
+  handleRemoveTask = idx => () => {
     const { tasks, handleRemoveTask } = this.props;
     const tasksAfterRemove = tasks.filter((t, tidx) => idx !== tidx);
     handleRemoveTask(tasksAfterRemove);
@@ -34,13 +39,8 @@ class CreateTaskForm extends Component {
     const { tasks, errors } = this.props;
     return (
       <CreateTaskFormWrapper>
-        <Button
-          type="button"
-          compact
-          color='blue'
-          size='tiny'
-          onClick={this.handleAddNewTask}
-        ><Icon name='add square'/>
+        <Button type="button" compact color="blue" size="tiny" onClick={this.handleAddNewTask}>
+          <Icon name="add square" />
           Add new task
         </Button>
 
@@ -48,8 +48,8 @@ class CreateTaskForm extends Component {
           <Segment>
             <Query query={GET_PROJECT_OF_MEMBER}>
               {({ data, loading, error }) => {
-                if (loading) return <Loader size='tiny' active inline='centered'/>;
-                if (error) return <ErrorMessage error={error}/>;
+                if (loading) return <Loader size="tiny" active inline="centered" />;
+                if (error) return <ErrorMessage error={error} />;
                 const { projects } = data.me;
 
                 return (
@@ -65,14 +65,20 @@ class CreateTaskForm extends Component {
                           >
                             <option>Select Project...</option>
                             {projects.map(project => (
-                              <option
-                                key={project.id}
-                                value={project.id}
-                              >
+                              <option key={project.id} value={project.id}>
                                 {project.title}
                               </option>
                             ))}
                           </SelectProject>
+
+                          <TaskInput
+                            type="text"
+                            name="title"
+                            value={task.title}
+                            placeholder="Title"
+                            autoComplete="off"
+                            onChange={this.handleTaskChange(idx)}
+                          />
 
                           <TaskInput
                             type="text"
@@ -94,16 +100,14 @@ class CreateTaskForm extends Component {
                           />
 
                           <Button type="button" onClick={this.handleRemoveTask(idx)} icon>
-                            <Icon name='remove circle'/>
+                            <Icon name="remove circle" />
                           </Button>
                         </TaskItem>
-                        {errors.tasks[idx] && (
-                          <TextError>{errors.tasks[idx]}</TextError>
-                        )}
+                        {errors.tasks[idx] && <TextError>{errors.tasks[idx]}</TextError>}
                       </TaskContainerWrapper>
                     ))}
                   </Fragment>
-                )
+                );
               }}
             </Query>
           </Segment>
