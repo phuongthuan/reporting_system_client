@@ -7,15 +7,14 @@ import Spinner from 'components/Spinner';
 
 import * as Yup from 'yup';
 import SelectInput from 'components/SelectInput';
+import { ALL_PROJECTS_QUERY, variables } from 'components/ProjectListing';
 import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
 import { CenterWrapper } from '../../styles/App';
 import ErrorMessage from '../ErrorMessage';
 
 export const ProjectSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  teamLeader: Yup.string().required('Team leader is required'),
-  members: Yup.array().min(1, 'Pick at least 1 member')
+  title: Yup.string().required('Title is required')
 });
 
 const getOptions = users => {
@@ -25,7 +24,16 @@ const getOptions = users => {
 
 const ProjectFormCreate = () => (
   <CenterWrapper>
-    <Mutation mutation={CREATE_PROJECT_MUTATION}>
+    <Mutation
+      mutation={CREATE_PROJECT_MUTATION}
+      update={(store, { data: { createProject } }) => {
+        if (store.data.data.ROOT_QUERY['projects({"orderBy":"createdAt_DESC"})']) {
+          const data = store.readQuery({ query: ALL_PROJECTS_QUERY, variables });
+          data.projects.unshift(createProject);
+          store.writeQuery({ query: ALL_PROJECTS_QUERY, data, variables });
+        }
+      }}
+    >
       {(createProject, { loading, error }) => {
         if (error) return <ErrorMessage error={error} />;
 
@@ -141,8 +149,9 @@ const ProjectFormCreate = () => (
 );
 
 const CREATE_PROJECT_MUTATION = gql`
-  mutation CREATE_PROJECT_MUTATION($title: String!, $members: [ID!], $teamLeader: ID!) {
+  mutation CREATE_PROJECT_MUTATION($title: String!, $members: [ID], $teamLeader: ID) {
     createProject(title: $title, members: $members, teamLeader: $teamLeader) {
+      id
       title
       members {
         id
@@ -150,6 +159,7 @@ const CREATE_PROJECT_MUTATION = gql`
       }
       teamLeader {
         id
+        avatar
         name
       }
     }
@@ -162,6 +172,15 @@ export const ALL_USERS_QUERY = gql`
       id
       name
       email
+      avatar
+      phone
+      roles {
+        name
+      }
+      team {
+        id
+        name
+      }
     }
   }
 `;

@@ -34,7 +34,7 @@ class AssignMemberToTeamButton extends Component {
     return options;
   };
 
-  handleMembersRoBeUpdated = (members, client) => {
+  handleMembersToBeUpdated = (members, client) => {
     const membersToBeUpdated = members.map(member =>
       client.readFragment({
         id: `User:${member}`,
@@ -128,7 +128,7 @@ class AssignMemberToTeamButton extends Component {
                           { setSubmitting, setStatus, setErrors, resetForm }
                         ) => {
                           const members = values.members.map(member => member.value);
-                          this.handleMembersRoBeUpdated(members, client);
+                          this.handleMembersToBeUpdated(members, client);
 
                           try {
                             await assignMembers({

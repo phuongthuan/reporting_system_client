@@ -11,6 +11,7 @@ import TextInput from '../TextInput';
 import AsyncButton from '../AsyncButton';
 import { CenterWrapper } from '../../styles/App';
 import ErrorMessage from '../ErrorMessage';
+import { ALL_PROJECTS_QUERY, variables } from '../ProjectListing';
 
 const getOptions = users => {
   const options = users.map(user => ({ value: user.id, label: user.name }));
@@ -35,7 +36,25 @@ const ProjectFormUpdate = ({ match }) => (
 
       return (
         <CenterWrapper>
-          <Mutation mutation={UPDATE_PROJECT_MUTATION}>
+          <Mutation
+            mutation={UPDATE_PROJECT_MUTATION}
+            update={(store, { data: { updateProject } }) => {
+              if (store.data.data.ROOT_QUERY['projects({"orderBy":"createdAt_DESC"})']) {
+                const data = store.readQuery({ query: ALL_PROJECTS_QUERY, variables });
+                const newProjects = data.projects
+                  .concat()
+                  .map(project => (project.id === updateProject.id ? updateProject : project));
+
+                store.writeQuery({
+                  query: ALL_PROJECTS_QUERY,
+                  variables,
+                  data: {
+                    projects: newProjects
+                  }
+                });
+              }
+            }}
+          >
             {(updateProject, { loading, error }) => {
               if (error) return <ErrorMessage error={error} />;
 
@@ -44,11 +63,11 @@ const ProjectFormUpdate = ({ match }) => (
                   initialValues={{
                     title,
                     members: members.map(m => convertValuesForReactSelect(m)),
-                    teamLeader: convertValuesForReactSelect(teamLeader)
+                    teamLeader: teamLeader ? convertValuesForReactSelect(teamLeader) : ''
                   }}
                   enableReinitialize
                   validationSchema={ProjectSchema}
-                  onSubmit={async (values, { setSubmitting, setStatus, setErrors, resetForm }) => {
+                  onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
                     const { id } = match.params;
                     const { title } = values;
                     const teamLeader = values.teamLeader.value;
@@ -63,7 +82,6 @@ const ProjectFormUpdate = ({ match }) => (
                           teamLeader
                         }
                       });
-                      resetForm({});
                       setStatus({ success: true });
                     } catch (error) {
                       setStatus({ success: false });
@@ -159,14 +177,17 @@ const ProjectFormUpdate = ({ match }) => (
 const UPDATE_PROJECT_MUTATION = gql`
   mutation UPDATE_PROJECT_MUTATION($id: ID!, $title: String, $members: [ID!], $teamLeader: ID) {
     updateProject(id: $id, title: $title, members: $members, teamLeader: $teamLeader) {
+      id
       title
       members {
         id
         name
+        avatar
       }
       teamLeader {
         id
         name
+        avatar
       }
     }
   }
@@ -175,14 +196,17 @@ const UPDATE_PROJECT_MUTATION = gql`
 const SINGLE_PROJECT_QUERY = gql`
   query SINGLE_PROJECT_QUERY($id: ID!) {
     project(where: { id: $id }) {
+      id
       title
       teamLeader {
         id
         name
+        avatar
       }
       members {
         id
         name
+        avatar
       }
     }
   }
