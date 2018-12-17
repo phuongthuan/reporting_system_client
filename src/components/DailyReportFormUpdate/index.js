@@ -71,7 +71,21 @@ class DailyReportFormUpdate extends Component {
     return !isDisabled;
   };
 
-  setStatus = status => {
+  resetForm = () => {
+    this.setState({
+      title: '',
+      emotion: ':grinning:',
+      tasks: [],
+      plan: '',
+      comment: '',
+      touched: {
+        title: false,
+        plan: false
+      }
+    })
+  };
+
+  setStatus = (status) => {
     if (status) {
       this.setState({ success: true });
       setTimeout(() => {
@@ -176,9 +190,25 @@ class DailyReportFormUpdate extends Component {
                 />
               )}
 
-              <Button disabled={isDisabled} type="submit" compact color="blue" size="tiny">
-                Update
-              </Button>
+              <div>
+                <Button
+                  disabled={isDisabled}
+                  type="submit"
+                  color='blue'
+                  size='tiny'
+                >
+                  Update
+                </Button>
+
+                <Button
+                  onClick={this.resetForm}
+                  type="button"
+                  color='olive'
+                  size='tiny'
+                >
+                  Clear
+                </Button>
+              </div>
 
               <Message
                 success

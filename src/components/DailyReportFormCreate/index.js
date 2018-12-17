@@ -3,6 +3,7 @@ import { Form, Button, Message } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { compose, graphql, Mutation } from 'react-apollo';
 import { itemsAmount } from 'containers/DailyReportPage/constants';
+import {Persist} from 'react-persist';
 import TextInput from '../TextInput';
 import TextArea from '../TextArea';
 import ErrorMessage from '../ErrorMessage';
@@ -184,14 +185,37 @@ class DailyReportFormCreate extends Component {
                 onChange={this.handleTextChange}
               />
 
-              <Button disabled={isDisabled} type="submit" compact color="blue" size="tiny">
-                Create
-              </Button>
+              <div>
+                <Button
+                  disabled={isDisabled}
+                  type="submit"
+                  color='blue'
+                  size='tiny'
+                >
+                  Create
+                </Button>
+
+                <Button
+                  onClick={this.resetForm}
+                  type="button"
+                  color='olive'
+                  size='tiny'
+                >
+                  Clear
+                </Button>
+              </div>
 
               <Message
                 success
                 header="Create Successfully!"
                 content="Your report has been created."
+              />
+
+              <Persist
+                name="create-report-form"
+                data={this.state}
+                debounce={500}
+                onMount={data => this.setState(data)}
               />
             </Form>
           );
