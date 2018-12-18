@@ -7,6 +7,7 @@ const headerItems = [
   'Date',
   'Actions'
 ];
+
 const itemsAmount = 10;
 
 export { headerItems, itemsAmount };

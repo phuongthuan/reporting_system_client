@@ -24,11 +24,13 @@ const SideBar = () => (
                 <Link to="/profile/edit">Edit Profile</Link>
               </li>
               <li>
-                <Link to="/reports/new">Create Daily Report</Link>
-              </li>
-              <li>
                 <Link to="/reports">Daily Reports</Link>
               </li>
+              {rolesArray.includes('MEMBER') && (
+                <li>
+                  <Link to="/reports/new">Create Daily Report</Link>
+                </li>
+              )}
 
               {rolesArray.includes('TEAM_LEADER') && (
                 <Fragment>
