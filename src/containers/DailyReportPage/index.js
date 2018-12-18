@@ -7,20 +7,41 @@ import DailyReportDetailContainer from './DailyReportDetailContainer';
 import DailyReportContainer from './DailyReportContainer';
 import NoMatch from '../../utils/NoMatch';
 import { MainWrapper, RightContent, LeftContent } from '../../styles/App';
+import GroupLeaderReportPage from './GroupLeaderReportPage';
+import PermissionRoute from '../../utils/PermissionRoute';
 
-const DailyReportPage = ({ match }) => (
+const DailyReportPage = ({ match, userData }) => (
   <MainWrapper>
     <LeftContent>
       <SideBar />
     </LeftContent>
     <RightContent>
       <Switch>
-        <Route exact path={match.url} render={props => <DailyReportContainer {...props} />} />
-        <Route path={`${match.path}/new`} component={CreateDailyReportContainer} />
-        <Route
-          path={`${match.path}/edit/:id`}
-          render={props => <UpdateDailyReportContainer {...props} />}
+
+        <PermissionRoute
+          exact
+          path={match.url}
+          userData={userData}
+          roles={['GROUP_LEADER']}
+          component={GroupLeaderReportPage}
         />
+
+        <Route exact path={match.url} render={props => <DailyReportContainer {...props} />} />
+
+        <PermissionRoute
+          path={`${match.path}/new`}
+          userData={userData}
+          roles={['MEMBER']}
+          component={CreateDailyReportContainer}
+        />
+
+        <PermissionRoute
+          path={`${match.path}/edit/:id`}
+          userData={userData}
+          roles={['MEMBER']}
+          component={UpdateDailyReportContainer}
+        />
+
         <Route
           path={`${match.path}/:id`}
           render={props => <DailyReportDetailContainer {...props} />}

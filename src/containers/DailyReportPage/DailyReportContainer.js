@@ -12,14 +12,13 @@ import history from '../../utils/history';
 import { ContentWrapper } from '../../styles/App';
 import { headerItems, itemsAmount } from './constants';
 import formatDate from '../../utils/formatDate';
-
+import ErrorMessage from '../../components/ErrorMessage';
 import {
   ContentsTable,
   ContentsHeaderColumn,
   ContentsRowColumn,
   IconBtn
 } from '../../styles/ContentsTable';
-import ErrorMessage from '../../components/ErrorMessage';
 
 const DAILY_REPORTS_QUERY = gql`
   query DAILY_REPORTS_QUERY($first: Int, $skip: Int, $orderBy: DailyReportOrderByInput) {

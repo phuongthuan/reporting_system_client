@@ -138,7 +138,7 @@ class DailyReportFormCreate extends Component {
                 }
                 try {
                   await createDailyReport();
-                  this.setStatus(true);
+                  await this.setStatus(true);
                   this.resetForm();
                 } catch (e) {
                   this.setStatus(false);
